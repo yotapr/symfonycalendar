@@ -1,0 +1,19 @@
+{% extends 'base2.html.twig' %}
+{% block body %}
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+{% for entry in event %}
+  {{ entry.date|date('d-m-Y') }}
+  {{ entry.title }}
+  {{ entry.gallery }}
+  {{ entry.teacher }}
+  {{ entry.start|date('d-m-Y') }}
+  {{ entry.end|date('d-m-Y') }}
+  {{ entry.place }}
+  {{ entry.course }}
+  {{ entry.topic }}
+  <a href="http://www.lacittadellaluce.org/it/iscrizione-line">Iscriviti</a>
+{% endfor %}
+
+{% endblock %}

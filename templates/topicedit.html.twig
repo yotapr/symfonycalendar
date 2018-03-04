@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="content-wrapper">
+<section class="content">
+<div class="container">
+<div class="row">
+{% for form in forms %}
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+{% endfor %}
+</div>
+</div>
+</section>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+calendario:
+    path: /
+    controller: App\Controller\CalendarController::index
+admin:
+    path: /admin/
+    controller: App\Controller\AdminController::index
+eventedit:
+    path: /admin/event/edit/{idedit}
+    controller: App\Controller\AdminController::eventedit
+    requirements:
+        id: '\d+'
+topic:
+    path: /admin/topic
+    controller: App\Controller\AdminController::topic
+teacher:
+    path: /admin/teacher
+    controller: App\Controller\AdminController::teacher
+type:
+    path: /admin/type
+    controller: App\Controller\AdminController::type
+place:
+    path: /admin/place
+    controller: App\Controller\AdminController::place
+topicedit:
+    path: /admin/topic/edit
+    controller: App\Controller\AdminController::topicedit
+teacheredit:
+    path: /admin/teacher/edit
+    controller: App\Controller\AdminController::teacheredit
+typeedit:
+    path: /admin/type/edit
+    controller: App\Controller\AdminController::typeedit
+placeedit:
+    path: /admin/place/edit
+    controller: App\Controller\AdminController::placeedit
+eventremove:
+    path: admin/event/remove/{id}
+    controller: App\Controller\AdminController::removeevent
+    requirements:
+        id: '\d+'
+placeremove:
+    path: admin/place/remove/{id}
+    controller: App\Controller\AdminController::removeplace
+    requirements:
+        id: '\d+'
+teacherremove:
+    path: admin/teacher/remove/{id}
+    controller: App\Controller\AdminController::removeteacher
+    requirements:
+        id: '\d+'
+topicremove:
+    path: admin/topic/remove/{id}
+    controller: App\Controller\AdminController::removeevent
+    requirements:
+        id: '\d+'
+typeremove:
+    path: admin/type/remove/{id}
+    controller: App\Controller\AdminController::removetype
+    requirements:
+        id: '\d+'
+user:
+    path: /admin/user
+    controller: App\Controller\AdminController::user
+useredit:
+    path: /admin/useredit
+    controller: App\Controller\AdminController::useredit
+userremove:
+    path: /user/remove/{id}
+    controller: App\Controller\AdminController::removeuser
+    requirements:
+        id: '\d+'
+placeall:
+    path: /admin/place/all
+    controller: App\Controller\AdminController::allplace
+topicall:
+    path: /admin/topic/all
+    controller: App\Controller\AdminController::alltopic
+typeall:
+    path: /admin/type/all
+    controller: App\Controller\AdminController::alltype
+teacherall:
+    path: /admin/teacher/all
+    controller: App\Controller\AdminController::allteacher
+userall:
+    path: /admin/user/all
+    controller: App\Controller\AdminController::alluser
+login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+logout:
+    path: /logout
