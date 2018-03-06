@@ -41,6 +41,11 @@ class User implements UserInterface, \Serializable
      */
     private $roles;
 
+    /**
+     * @ORM\Column(type="string", length=60, unique=true)
+     */
+    private $recoverpasswordlink;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -51,6 +56,18 @@ class User implements UserInterface, \Serializable
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getRecoverpasswordlink()
+    {
+        return $this->recoverpasswordlink;
+    }
+
+    public function setRecoverpasswordlink($recoverpasswordlink)
+    {
+        $this->recoverpasswordlink = $recoverpasswordlink;
+
+        return $this;
     }
 
     public function getUsername()
@@ -107,6 +124,7 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
 
     public function getRoles()
     {

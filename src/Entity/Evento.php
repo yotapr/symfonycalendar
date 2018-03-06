@@ -27,23 +27,6 @@ class Evento
     private $title;
 
     /**
-     * @ORM\Column(type="string")
-     *
-     */
-    private $gallery;
-
-    public function getGallery()
-    {
-        return $this->gallery;
-    }
-
-    public function setGallery($galleryupload)
-    {
-        $this->gallery = $galleryupload;
-
-        return $this;
-    }
-    /**
      * @ORM\Column(type="integer")
      */
     private $teacher;

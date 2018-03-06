@@ -26,6 +26,23 @@ class Topic
      */
     private $active;
 
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $gallery;
+
+    public function getGallery()
+    {
+        return $this->gallery;
+    }
+
+    public function setGallery($galleryupload)
+    {
+        $this->gallery = $galleryupload;
+
+        return $this;
+    }
 
     // add your own fields
 

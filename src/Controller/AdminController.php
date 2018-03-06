@@ -16,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 class AdminController extends Controller
 {
   public function index(Request $request)
@@ -193,7 +193,6 @@ class AdminController extends Controller
     $form = $this->createFormBuilder();
     $form->add("id", HiddenType::class, array('data' => $event->getId()));
     $form->add("title", TextType::class, array('required'   => true, 'data' => $event->getTitle()));
-    $form->add("image", TextType::class, array('required'   => true, 'data' => $event->getImage()));
     $form->add("start", DateTimeType::class, array('required'   => true));
     $form->add("end", DateTimeType::class, array('required'   => true));
     $form->add("teacher", ChoiceType::class, array('required'   => true, 'choices'  => $teacherselect));
@@ -210,7 +209,6 @@ class AdminController extends Controller
         if (empty($form['attivo'])) $form['attivo'] = 0;
         //$eventedit->setActive($form['attivo']);
         $eventedit->setTitle($form['title']);
-        $eventedit->setImage($form['image']);
         $eventedit->setStart($form['start']);
         $eventedit->setEnd($form['end']);
         $eventedit->setTeacher($form['teacher']);
@@ -230,6 +228,7 @@ class AdminController extends Controller
     $form = $this->createFormBuilder($topic);
     $form->add("active", CheckboxType::class, array('data' => true, 'required'   => false));
     $form->add("name", TextType::class, array('required'   => true));
+    $form->add("image", TextType::class, array('required'   => true, 'data' => $topic->getImage()));
     $form->add('save', SubmitType::class, array('label' => 'Invia'));
     $form = $form->getForm();
     $form->handleRequest($request);
@@ -308,6 +307,31 @@ class AdminController extends Controller
     }
     return $this->render('type.html.twig', array('form' => $form->createView()));
   }
+  public function recoverpassword(Request $request)
+  {
+    $form = $this->createFormBuilder()
+        ->add('email', EmailType::class)
+        ->add('send', SubmitType::class)
+        ->getForm();
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $data = $form->getData();
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->findAll();
+        foreach ($user as $usersingle) {
+          $mail = $usersingle->getEmail();
+          if (strtolower($mail) == strtolower($data['email'])) {
+            $recoverurl = bin2hex(openssl_random_pseudo_bytes(8));
+            $usersingle->setRecoverpasswordlink($recoverurl);
+            $em->flush();
+            $response = $this->forward('App\Controller\MailController::recoverpassword', array(
+              'mail' => $mail, 'recoverurl' => $recoverurl
+            ));
+          }
+        }
+    }
+    return $this->render('recoverpassword.html.twig', array('form' => $form->createView()));
+  }
   public function user(Request $request)
   {
     $type = new User();
@@ -318,7 +342,7 @@ class AdminController extends Controller
     $form->add("username", TextType::class, array('required'   => true));
     $form->add("password", TextType::class, array('required'   => true));
     $form->add("email", TextType::class, array('required'   => true));
-    $form->add('save', SubmitType::class, array('label' => 'Invia'));
+    $form->add("save", SubmitType::class, array('label' => 'Invia'));
     $form = $form->getForm();
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
@@ -326,7 +350,12 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);
         $em->flush();
-        return $this->redirectToRoute('admin');
+        $name = $user->getUsername();
+        $mail = $user->getEmail();
+        $response = $this->forward('App\Controller\MailController::welcomeuser', array(
+          'name'  => $name, 'mail' => $mail
+        ));
+      //  return $this->redirectToRoute('admin');
     }
     return $this->render('user.html.twig', array('form' => $form->createView()));
   }
@@ -368,6 +397,7 @@ class AdminController extends Controller
         $form = $this->createFormBuilder();
         $form->add("attivo", CheckboxType::class, array('data' => $topicsingle->getActive(), 'required'   => false, 'label' => $topicsingle->getName()));
         $form->add("name", TextType::class, array('data' => $topicsingle->getName(), 'required'   => false, 'label' => 'Nome '));
+        $form->add("image", TextType::class, array('required'   => true, 'data' => $event->getImage()));
         $form->add('save', SubmitType::class, array('label' => 'Invia'));
         $form->add("id", HiddenType::class, array( 'data' => $topicsingle->getId()));
         $form = $form->getForm();
@@ -380,8 +410,9 @@ class AdminController extends Controller
         if (empty($form['attivo'])) $form['attivo'] = 0;
         $topicedit->setActive($form['attivo']);
         $topicedit->setName($form['name']);
+        $eventedit->setImage($form['image']);
         $em->flush();
-        return $this->redirectToRoute('topicedit');
+        return $this->redirectToRoute('admin');
       }
     return $this->render('topicedit.html.twig', array('topic' => $topic, 'forms' => $forms));
   }
@@ -557,5 +588,32 @@ class AdminController extends Controller
       $em->flush();
     }
     return $this->redirectToRoute('admin');
+  }
+  public function changepassword($keyurl, Request $request, \Swift_Mailer $mailer)
+  {
+      $em = $this->getDoctrine()->getManager();
+      $user = $em->getRepository(User::class)->findOneBy(array('recoverpasswordlink' => $keyurl));
+      if (!$user) {
+          throw $this->createNotFoundException(
+              'No user found '
+          );
+      }
+      else {
+        $form = $this->createFormBuilder()
+            ->add('newpassword', TextType::class)
+            ->add('confirmpassword', TextType::class)
+            ->add('send', SubmitType::class)
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            if ($data['newpassword'] == $data['confirmpassword']) {
+                $user->setPassword($data['newpassword']);
+                $em->flush();
+            } else echo "Le password non coincidono";
+        }
+      }
+      return $this->render('newpassword.html.twig', array('form' => $form->createView()));
   }
 }

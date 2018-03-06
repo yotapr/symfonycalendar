@@ -1,3 +1,6 @@
+mail:
+    path: /mail
+    controller: App\Controller\MailController::welcomeuser
 calendario:
     path: /
     controller: App\Controller\CalendarController::index
@@ -87,5 +90,11 @@ userall:
 login:
     path: /login
     controller: App\Controller\SecurityController::login
+recoverpassword:
+    path: /recoverpassword
+    controller: App\Controller\AdminController::recoverpassword
+recoverpasswordurl:
+    path: /recoverpassword/{keyurl}
+    controller: App\Controller\AdminController::changepassword
 logout:
     path: /logout
