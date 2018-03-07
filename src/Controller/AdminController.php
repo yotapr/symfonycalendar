@@ -57,7 +57,6 @@ class AdminController extends Controller
     }
     $formadd = $this->createFormBuilder($event);
     $formadd->add("title", TextType::class, array('required'   => true));
-    $formadd->add("gallery", FileType::class, array('label' => 'Brochure (jpg, jpeg or png file)', 'required'   => true));
     $formadd->add("start", DateTimeType::class, array('required'   => true));
     $formadd->add("end", DateTimeType::class, array('required'   => true));
     $formadd->add("teacher", ChoiceType::class, array('required'   => true, 'choices'  => $teacherselect));
@@ -69,17 +68,6 @@ class AdminController extends Controller
     $formadd->handleRequest($request);
     if ($formadd->isSubmitted() && $formadd->isValid()) {
         $event = $formadd->getData();
-        /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-        $file = $event->getGallery();
-        print_r($event);
-        echo $file;
-        $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-        /* moves the file to the directory where brochures are stored
-        $file->move(
-            $this->getParameter('brochures_directory'),
-            $fileName
-        ); */
-        $event->setGallery($fileName);
         $date = date('Y-m-d H:i:s');
         $event->setDate(new \DateTime());
         $em = $this->getDoctrine()->getManager();
@@ -228,7 +216,7 @@ class AdminController extends Controller
     $form = $this->createFormBuilder($topic);
     $form->add("active", CheckboxType::class, array('data' => true, 'required'   => false));
     $form->add("name", TextType::class, array('required'   => true));
-    $form->add("image", TextType::class, array('required'   => true, 'data' => $topic->getImage()));
+    $form->add("gallery", TextType::class, array('required'   => true, 'data' => $topic->getGallery()));
     $form->add('save', SubmitType::class, array('label' => 'Invia'));
     $form = $form->getForm();
     $form->handleRequest($request);
@@ -397,7 +385,7 @@ class AdminController extends Controller
         $form = $this->createFormBuilder();
         $form->add("attivo", CheckboxType::class, array('data' => $topicsingle->getActive(), 'required'   => false, 'label' => $topicsingle->getName()));
         $form->add("name", TextType::class, array('data' => $topicsingle->getName(), 'required'   => false, 'label' => 'Nome '));
-        $form->add("image", TextType::class, array('required'   => true, 'data' => $event->getImage()));
+        $form->add("image", TextType::class, array('required'   => true, 'data' => $topicsingle->getGallery()));
         $form->add('save', SubmitType::class, array('label' => 'Invia'));
         $form->add("id", HiddenType::class, array( 'data' => $topicsingle->getId()));
         $form = $form->getForm();

@@ -13,7 +13,7 @@ eventedit:
     requirements:
         id: '\d+'
 topic:
-    path: /admin/topic
+    path: /admin/topic/
     controller: App\Controller\AdminController::topic
 teacher:
     path: /admin/teacher
