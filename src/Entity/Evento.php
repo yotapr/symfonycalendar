@@ -56,6 +56,12 @@ class Evento
      */
     private $topic;
 
+    // used for display place.name
+    private $placename;
+
+    // used for display topic.gallery
+    private $gallery;
+
 
     // add your own fields
 
@@ -284,5 +290,35 @@ class Evento
 
         return $this;
     }
+
+
+
+    public function getPlacename()
+    {
+        return $this->placename;
+    }
+
+    public function setPlacename($placename)
+    {
+        $this->placename = $placename;
+
+        return $this;
+    }
+
+
+    public function getGallery()
+    {
+        return $this->gallery;
+    }
+
+    public function setGallery($gallery)
+    {
+        $this->gallery = $gallery;
+
+        return $this;
+    }
+
+
+
 
 }

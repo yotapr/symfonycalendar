@@ -1,8 +1,27 @@
 <!DOCTYPE html>
-{% block title %}Symfony Calendar{% endblock %}
-        {% block stylesheets %}{% endblock %}
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>La Citt&agrave; della Luce - Calendario dei corsi e seminari</title>
+
+        {% block title %}
+        {% endblock %}
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('dist/css/front.css') }}">
+        {% endblock %}
+        <link rel="shortcut icon" href="http://localhost/symfonycalendar/public/files/immagini/favicon.ico" />
+    </head>
+    <body>
+
+      <p class="text-align-center" id="logo"><a href="http://www.lacittadellaluce.org">
+        <img src="http://lacittadellaluce.org/sites/default/files/la-citta-della-luce-150.png" alt="La Citt&agrave; della Luce" width="500" height="50" border="0"></a><br />
+      <a style="font-size:13pt" href="http://www.lacittadellaluce.org">www.lacittadellaluce.org</a>
+      </p>
+      <h2 class="text-align-center">Calendario dei corsi e seminari</h2>
       {% block navbar %}
       {% endblock %}
         {% block body %}{% endblock %}
         {% block javascripts %}
         {% endblock %}
+    </body>
+</html>

@@ -42,7 +42,7 @@
   <!-- Sidebar Menu -->
   <ul class="sidebar-menu" data-widget="tree">
     <li class="treeview">
-      <li class="active"><a href="/admin/"><i class="fa fa-link"></i> <span>Dashboard</span></a></li>
+      <li class="active"><a href="{{ app.request.getBaseURL() }}/admin/"><i class="fa fa-link"></i> <span>Dashboard</span></a></li>
     </li>
     <li class="treeview">
       <a href="#"><i class="fa fa-link"></i> <span>Argomento</span>
@@ -51,9 +51,9 @@
           </span>
       </a>
       <ul class="treeview-menu">
-        <li><a href="/admin/topic">Nuovo argomento</a></li>
-        <li><a href="/admin/topic/edit">Modifica argomenti</a></li>
-        <li><a href="/admin/topic/all">Cancella argomenti</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/topic">Nuovo argomento</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/topic/edit">Modifica argomenti</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/topic/all">Cancella argomenti</a></li>
       </ul>
     </li>
     <li class="treeview">
@@ -63,9 +63,9 @@
           </span>
       </a>
       <ul class="treeview-menu">
-        <li><a href="/admin/teacher">Nuovo maestro</a></li>
-        <li><a href="/admin/teacher/edit">Modifica maestro</a></li>
-        <li><a href="/admin/teacher/all">Cancella maestro</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/teacher">Nuovo maestro</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/teacher/edit">Modifica maestro</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/teacher/all">Cancella maestro</a></li>
       </ul>
     </li>
     <li class="treeview">
@@ -75,9 +75,9 @@
           </span>
       </a>
       <ul class="treeview-menu">
-        <li><a href="/admin/type">Nuovo tipo di corso</a></li>
-        <li><a href="/admin/type/edit">Modifica tipo di corso</a></li>
-        <li><a href="/admin/type/all">Cancella tipo di corso</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/type">Nuovo tipo di corso</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/type/edit">Modifica tipo di corso</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/type/all">Cancella tipo di corso</a></li>
       </ul>
     </li>
     <li class="treeview">
@@ -87,9 +87,9 @@
           </span>
       </a>
       <ul class="treeview-menu">
-        <li><a href="/admin/place">Nuovo luogo</a></li>
-        <li><a href="/admin/place/edit">Modifica luogo</a></li>
-        <li><a href="/admin/place/all">Cancella luogo</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/place">Nuovo luogo</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/place/edit">Modifica luogo</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/place/all">Cancella luogo</a></li>
       </ul>
     </li>
     <li class="treeview">
@@ -99,9 +99,9 @@
           </span>
       </a>
       <ul class="treeview-menu">
-        <li><a href="/admin/user">Nuovo utente</a></li>
-        <li><a href="/admin/user/edit">Modifica utente</a></li>
-        <li><a href="/admin/user/all">Cancella utenti</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/user">Nuovo utente</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/user/edit">Modifica utente</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/user/all">Cancella utenti</a></li>
       </ul>
     </li>
   </ul>

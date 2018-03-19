@@ -3,16 +3,37 @@
 {{ form_start(form) }}
 {{ form_widget(form) }}
 {{ form_end(form) }}
+<div id="calendario">
+<table width="100%" border="0" class="text-align-center" cellpadding="5" cellspacing="0">
 {% for entry in event %}
-  {{ entry.date|date('d-m-Y') }}
-  {{ entry.title }}
-  {{ entry.teacher }}
-  {{ entry.start|date('d-m-Y') }}
-  {{ entry.end|date('d-m-Y') }}
-  {{ entry.place }}
-  {{ entry.course }}
-  {{ entry.topic }}
-  <a href="http://www.lacittadellaluce.org/it/iscrizione-line">Iscriviti</a>
+  <tr>
+    <td width="5%" class="text-align-center">
+    	  <div>{{ entry.start|date('M') }}</div>
+        <div class="big-day">{{ entry.start|date('d') }}</div>
+    	  <div><small>{{ entry.start|date('l') }}</small></div>
+    </td>
+    <td width="5%" class="text-align-center">
+        <img src="http://localhost/symfonycalendar/public/files/immagini/{{ entry.gallery }}"  width="60" height="60" alt="" />
+         <br>{{ app.request.getBaseURL() }} 
+    </td>
+    <td width="65%" class="text-align-left">
+        <strong><a href="">{{ entry.title }}</a></strong><br />
+        con <strong>{{ entry.teacher }}</strong><br />
+        <em><small>
+          da {{ entry.start|date('D d/m/Y') }} ore {{ entry.start|date('H:i') }}
+          a {{ entry.end|date('D d/m/Y') }} ore {{ entry.start|date('H:i') }}
+        </small></em>
+    </td>
+    <td width="25%" align="left">
+        <a href="https://www.google.it/maps/place/{{ entry.place }}" target="_blank">
+         {{ entry.placename }} <br />
+        {{ entry.place }}
+        </a><br />
+        <a href="http://www.lacittadellaluce.org/it/node/828" target="_blank" ><strong>Iscrizione</strong></a>
+    </td>
+  </tr>
 {% endfor %}
+</table>
+</div>
 
 {% endblock %}

@@ -6,6 +6,7 @@ use App\Entity\Topic;
 use App\Entity\Type;
 use App\Entity\Place;
 use App\Entity\User;
+use App\Entity\Usertype;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,6 +20,65 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 class AdminController extends Controller
 {
+  public function usertype(Request $request)
+  {
+    $usertype = new Usertype();
+    $form = $this->createFormBuilder($usertype);
+    $form->add('usertype', TextType::class, array('required'   => true));
+    $form->add('save', SubmitType::class, array('label'=> 'Invia'));
+    $form = $form->getForm();
+    $form->handleRequest($request);
+    if ($form->isSubmitted() &&  $form->isValid()) {
+      $usertype = $form->getData();
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($usertype);
+      $em->flush();
+      return $this->redirectToRoute('viewusertype');
+    }
+    return $this->render('usertype.html.twig', array('form' => $form->createView()));
+  }
+
+  public function editusertype(Request $request, $id)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $query = $this->getDoctrine()->getRepository(Usertype::class)->find($id);
+    $form = $this->createFormBuilder();
+    $form->add('usertype', TextType::class, array('label' => 'Inserisci i dati' ,'required' => true, 'data' => $query->getUsertype()));
+    $form->add('id', HiddenType::class, array('data' => $id));
+    $form->add('save', SubmitType::class, array('label'=> 'Modifica'));
+    $form = $form->getForm();
+    $form->handleRequest($request);
+    if ($form->isSubmitted() &&  $form->isValid())
+    {
+      $formedit = $form->getData();
+      print_r($formedit);
+
+      $editusertype = $em->getRepository(Usertype::class)->find($id);
+      $editusertype->setUsertype($formedit['usertype']);
+      $em->flush();
+      return $this->redirectToRoute('viewusertype');
+    }
+    return $this->render('usertype.html.twig', array('form' => $form->createView()));
+  }
+
+  public function removeusertype(Request $request, $id)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $query = $this->getDoctrine()->getRepository(Usertype::class)->find($id);
+    $em->remove($query);
+    $em->flush();
+    return $this->redirectToRoute('viewusertype');
+  }
+
+
+
+
+  public function viewusertype(Request $request)
+  {
+    $showusertype = $this->getDoctrine()->getRepository(Usertype::class)->findAll();
+    return $this->render('viewusertype.html.twig', array('viewusertype' => $showusertype ));
+  }
+
   public function index(Request $request)
   {
     $event = new Evento();

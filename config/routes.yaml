@@ -15,6 +15,33 @@ eventedit:
 topic:
     path: /admin/topic/
     controller: App\Controller\AdminController::topic
+topicedit:
+    path: /admin/topic/edit
+    controller: App\Controller\AdminController::topicedit
+topicremove:
+    path: admin/topic/remove/{id}
+    controller: App\Controller\AdminController::removeevent
+    requirements:
+        id: '\d+'
+topicall:
+    path: /admin/topic/all
+    controller: App\Controller\AdminController::alltopic
+usertype:
+    path: /admin/usertype/
+    controller: App\Controller\AdminController::usertype
+viewusertype:
+    path: /admin/viewusertype/
+    controller: App\Controller\AdminController::viewusertype
+editusertype:
+    path: /admin/editusertype/{id}
+    controller: App\Controller\AdminController::editusertype
+    requirements:
+        id: '\d+'
+removeusertype:
+    path: /admin/removeusertype/{id}
+    controller: App\Controller\AdminController::removeusertype
+    requirements:
+        id: '\d+'
 teacher:
     path: /admin/teacher
     controller: App\Controller\AdminController::teacher
@@ -24,9 +51,6 @@ type:
 place:
     path: /admin/place
     controller: App\Controller\AdminController::place
-topicedit:
-    path: /admin/topic/edit
-    controller: App\Controller\AdminController::topicedit
 teacheredit:
     path: /admin/teacher/edit
     controller: App\Controller\AdminController::teacheredit
@@ -51,11 +75,6 @@ teacherremove:
     controller: App\Controller\AdminController::removeteacher
     requirements:
         id: '\d+'
-topicremove:
-    path: admin/topic/remove/{id}
-    controller: App\Controller\AdminController::removeevent
-    requirements:
-        id: '\d+'
 typeremove:
     path: admin/type/remove/{id}
     controller: App\Controller\AdminController::removetype
@@ -75,9 +94,6 @@ userremove:
 placeall:
     path: /admin/place/all
     controller: App\Controller\AdminController::allplace
-topicall:
-    path: /admin/topic/all
-    controller: App\Controller\AdminController::alltopic
 typeall:
     path: /admin/type/all
     controller: App\Controller\AdminController::alltype

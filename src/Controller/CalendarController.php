@@ -67,6 +67,7 @@ class CalendarController extends Controller
         $event = $this->getDoctrine()
           ->getRepository(Evento::class)
           ->findByDate($date);
+/*          ->findAll(); */
       }
       foreach ($event as $singleevent) {
         $idteacher = $singleevent->getTeacher();
@@ -81,15 +82,18 @@ class CalendarController extends Controller
           ->getRepository(Topic::class)
           ->find($idtopic);
         $singleevent->setTopic($topic->getName());
+        $singleevent->setGallery($topic->getGallery());
         $coursetype = $this->getDoctrine()
           ->getRepository(Type::class)
           ->find($idcoursetype);
         $singleevent->setCourse($coursetype->getCoursetype());
+
         $place = $this->getDoctrine()
           ->getRepository(Place::class)
           ->find($idplace);
-        $place = $place->getAddress() . " - " . $place->getCity() . " (" . $place->getCountry() . ")";
-        $singleevent->setPlace($place);
+        $place1 = $place->getAddress() . " - " . $place->getCity() . " (" . $place->getCountry() . ")";
+        $singleevent->setPlace($place1);
+        $singleevent->setPlacename($place->getName());
       }
       if (!$event) {
         return new Response(

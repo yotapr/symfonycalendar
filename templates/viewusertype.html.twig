@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="content-wrapper">
+<section class="content">
+<div class="container">
+<div class="row">
+{% for entry in viewusertype %}
+<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item" style = 'background-color: #fff; '>
+  {{ entry.usertype }}
+  <a href="/admin/editusertype/{{ entry.id }}">Modifica</a>
+  <a href="/admin/removeusertype/{{ entry.id }}">Cancella</a>
+</div>
+{% endfor %}
+</div>
+</div>
+</section>
+</div>
+{% endblock %}
