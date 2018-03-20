@@ -24,3 +24,14 @@
  #calendario table {border-collapse:collapse;}
  #calendario td,  #calendario th {border: 1px solid #CCC;}
 .big-day {font-size: 36px}
+
+#calendar-form {
+  margin: 10px;
+}
+#form div{
+  display:inline;
+  margin-right: 15px;
+}
+#form label{
+  margin-right: 5px;
+}

@@ -1,8 +1,12 @@
 {% extends 'base2.html.twig' %}
 {% block body %}
+<div id="calendar-form">
+<div class="align-center">
 {{ form_start(form) }}
 {{ form_widget(form) }}
 {{ form_end(form) }}
+</div>
+</div>
 <div id="calendario">
 <table width="100%" border="0" class="text-align-center" cellpadding="5" cellspacing="0">
 {% for entry in event %}
@@ -13,15 +17,15 @@
     	  <div><small>{{ entry.start|date('l') }}</small></div>
     </td>
     <td width="5%" class="text-align-center">
-        <img src="http://localhost/symfonycalendar/public/files/immagini/{{ entry.gallery }}"  width="60" height="60" alt="" />
-         <br>{{ app.request.getBaseURL() }} 
+        <img src="{{ app.request.getBaseURL() }}/files/immagini/{{ entry.gallery }}"  width="60" height="60" alt="" />
+         <br>
     </td>
     <td width="65%" class="text-align-left">
         <strong><a href="">{{ entry.title }}</a></strong><br />
         con <strong>{{ entry.teacher }}</strong><br />
         <em><small>
-          da {{ entry.start|date('D d/m/Y') }} ore {{ entry.start|date('H:i') }}
-          a {{ entry.end|date('D d/m/Y') }} ore {{ entry.start|date('H:i') }}
+        da {{ entry.start|date('D d/m/Y') }} ore {{ entry.start|date('H:i') }}
+        a {{ entry.end|date('D d/m/Y') }} ore {{ entry.start|date('H:i') }}
         </small></em>
     </td>
     <td width="25%" align="left">
