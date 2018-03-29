@@ -9,7 +9,9 @@
             <img src="http://localhost/symfonycalendar/public/files/immagini/{{ entry.gallery }}"  width="60" height="60" alt="" />
             {{ entry.name }}<br>
             <a href="modify/{{ entry.id }}">Modifica</a>
+            {% if entry.delete == 1 %}
             <a href="remove/{{ entry.id }}">Cancella</a>
+            {% endif %}
           </div>
         {% endfor %}
       </div>

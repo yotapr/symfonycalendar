@@ -32,6 +32,9 @@ class Topic
      */
     private $gallery;
 
+    private $delete;
+
+
     public function getGallery()
     {
         return $this->gallery;
@@ -104,4 +107,15 @@ class Topic
         return $this;
     }
 
+    public function getDelete()
+    {
+        return $this->delete;
+    }
+
+    public function setDelete($delete)
+    {
+        $this->delete = $delete;
+
+        return $this;
+    }
 }

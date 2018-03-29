@@ -190,9 +190,22 @@ class AdminController extends Controller
   }
   public function alltopic()
   {
+    $eventall = $this->getDoctrine()
+      ->getRepository(Evento::class)
+      ->findAll();
     $topicall = $this->getDoctrine()
       ->getRepository(Topic::class)
       ->findAll();
+    foreach ($topicall as $topicsingle) {
+      $topicsingle->setDelete(0);
+      $id = $topicsingle->getId();
+      foreach ($eventall as $singleevent) {
+        $idtopic = $singleevent->getTopic();
+        if ($id == $idtopic) {
+          $topicsingle->setDelete(1);
+        }
+      }
+    }
     return $this->render('alltopic.html.twig', array('topic' => $topicall));
   }
   public function allplace()
@@ -467,7 +480,6 @@ class AdminController extends Controller
         return $this->render('topicmodify.html.twig', array('topic' => $topic, 'forms' => $form->createView()));
       }
   }
-
 
   public function topicedit(Request $request)
   {
