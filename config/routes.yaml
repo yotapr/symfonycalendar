@@ -12,20 +12,23 @@ eventedit:
     controller: App\Controller\AdminController::eventedit
     requirements:
         id: '\d+'
-topic:
+topicall:
     path: /admin/topic/
+    controller: App\Controller\AdminController::alltopic
+topic:
+    path: /admin/topic/new
     controller: App\Controller\AdminController::topic
 topicedit:
     path: /admin/topic/edit
     controller: App\Controller\AdminController::topicedit
+topicmodify:
+    path: /admin/topic/modify/{id}
+    controller: App\Controller\AdminController::topicmodify
 topicremove:
     path: admin/topic/remove/{id}
-    controller: App\Controller\AdminController::removeevent
+    controller: App\Controller\AdminController::topicremove
     requirements:
         id: '\d+'
-topicall:
-    path: /admin/topic/all
-    controller: App\Controller\AdminController::alltopic
 usertype:
     path: /admin/usertype/
     controller: App\Controller\AdminController::usertype

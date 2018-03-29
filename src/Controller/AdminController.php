@@ -437,6 +437,39 @@ class AdminController extends Controller
       }
     return $this->render('useredit.html.twig', array('user' => $user, 'forms' => $forms));
   }
+
+  public function topicmodify($id, Request $request)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $topic = $em->getRepository(Topic::class)->find($id);
+    if (!$topic)
+      {
+        throw $this->createNotFoundException('No article found for id '.$id);
+      } else {
+        $form = $this->createFormBuilder();
+        $form->add("name", TextType::class, array('data' => $topic->getName(), 'required'   => false, 'label' => 'Nome '));
+        $form->add("attivo", CheckboxType::class, array('data' => $topic->getActive(), 'required'   => false, 'label' => $topic->getName()));
+        $form->add("image", TextType::class, array('required'   => true, 'data' => $topic->getGallery()));
+        $form->add('save', SubmitType::class, array('label' => 'Invia'));
+        $form->add("id", HiddenType::class, array( 'data' => $topic->getId()));
+        $form = $form->getForm();
+        $forms[] = $form->createView();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $form = $form->getData();
+            $topicedit = $em->getRepository(Topic::class)->find($form['id']);
+            if (empty($form['attivo'])) $form['attivo'] = 0;
+            $topicedit->setActive($form['attivo']);
+            $topicedit->setName($form['name']);
+            $eventedit->setImage($form['image']);
+            $em->flush();
+            return $this->redirectToRoute('admin');
+          }
+        return $this->render('topicmodify.html.twig', array('topic' => $topic, 'forms' => $forms));
+      }
+  }
+
+
   public function topicedit(Request $request)
   {
     $em = $this->getDoctrine()->getManager();
