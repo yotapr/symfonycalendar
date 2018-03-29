@@ -453,19 +453,18 @@ class AdminController extends Controller
         $form->add('save', SubmitType::class, array('label' => 'Invia'));
         $form->add("id", HiddenType::class, array( 'data' => $topic->getId()));
         $form = $form->getForm();
-        $forms[] = $form->createView();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $form = $form->getData();
-            $topicedit = $em->getRepository(Topic::class)->find($form['id']);
-            if (empty($form['attivo'])) $form['attivo'] = 0;
-            $topicedit->setActive($form['attivo']);
-            $topicedit->setName($form['name']);
-            $eventedit->setImage($form['image']);
-            $em->flush();
-            return $this->redirectToRoute('admin');
-          }
-        return $this->render('topicmodify.html.twig', array('topic' => $topic, 'forms' => $forms));
+          $form = $form->getData();
+          $topicedit = $em->getRepository(Topic::class)->find($form['id']);
+          if (empty($form['attivo'])) $form['attivo'] = 0;
+          $topicedit->setActive($form['attivo']);
+          $topicedit->setName($form['name']);
+          $topicedit->setGallery($form['image']);
+          $em->flush();
+          return $this->redirectToRoute('topicall');
+        }
+        return $this->render('topicmodify.html.twig', array('topic' => $topic, 'forms' => $form->createView()));
       }
   }
 
@@ -491,7 +490,7 @@ class AdminController extends Controller
         if (empty($form['attivo'])) $form['attivo'] = 0;
         $topicedit->setActive($form['attivo']);
         $topicedit->setName($form['name']);
-        $eventedit->setImage($form['image']);
+        $topicedit->setImage($form['image']);
         $em->flush();
         return $this->redirectToRoute('admin');
       }
