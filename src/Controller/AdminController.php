@@ -197,12 +197,13 @@ class AdminController extends Controller
       ->getRepository(Topic::class)
       ->findAll();
     foreach ($topicall as $topicsingle) {
-      $topicsingle->setDelete(0);
+      $topicsingle->setDelete(1);
       $id = $topicsingle->getId();
       foreach ($eventall as $singleevent) {
         $idtopic = $singleevent->getTopic();
         if ($id == $idtopic) {
-          $topicsingle->setDelete(1);
+          /* topic in uso non lo cancello */
+          $topicsingle->setDelete(0);
         }
       }
     }
@@ -298,7 +299,7 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($topic);
         $em->flush();
-        return $this->redirectToRoute('admin');
+        return $this->redirectToRoute('topicall');
     }
     return $this->render('topic.html.twig', array('form' => $form->createView()));
   }
