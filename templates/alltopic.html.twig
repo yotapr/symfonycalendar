@@ -4,7 +4,7 @@
   <section class="content">
     <div class="container">
       <div class="row">
-        {% for entry in topic %}
+        {% for entry in topic | sortbyfield('name') %}
           <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item" style = 'background-color: #fff; '>
             <img src="http://localhost/symfonycalendar/public/files/immagini/{{ entry.gallery }}"  width="60" height="60" alt="" />
             {{ entry.name }}<br>
