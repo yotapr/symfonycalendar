@@ -1,18 +1,25 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <div class="content-wrapper">
-<section class="content">
-<div class="container">
-<div class="row">
-{% for entry in teacher %}
-<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item" style = 'background-color: #fff; '>
-  {{ entry.name }}
-  <a href="remove/{{ entry.id }}">Cancella</a>
-</div>
-{% endfor %}
-
-</div>
-</div>
-</section>
+  <section class="content">
+    <div class="container">
+      {% for entry in teacher %}
+      <div class="row">
+        <div class="col-lg-5 col-md-4 col-sm-6 portfolio-item" style = 'background-color: #fff; '>
+          <img src="http://localhost/symfonycalendar/public/bower_components/Ionicons/png/512/active{{ entry.active }}.png"  width="20 " height="20" alt="" />
+          {{ entry.name }}
+          <a href="teacher/modify/{{ entry.id }}">
+          <img src="http://localhost/symfonycalendar/public/bower_components/Ionicons/png/512/edit.png"  width="20 " height="20" alt="" /> Modifica</a>
+          {% if entry.delete == 1 %}
+          <a href="teacher/remove/{{ entry.id }}">
+            <img src="http://localhost/symfonycalendar/public/bower_components/Ionicons/png/512/android-remove.png"  width="20 " height="20" alt="" /> Cancella</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+      <a href="teacher/new"><img src="http://localhost/symfonycalendar/public/bower_components/Ionicons/png/512/android-add.png"  width="20 " height="20" alt="" />
+      <strong>Nuovo Maestro</strong></a>
+    </div>
+  </section>
 </div>
 {% endblock %}

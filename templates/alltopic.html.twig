@@ -3,19 +3,24 @@
 <div class="content-wrapper">
   <section class="content">
     <div class="container">
-      <div class="row">
-        {% for entry in topic | sortbyfield('name') %}
-          <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item" style = 'background-color: #fff; '>
+        {% for entry in topic %}
+        <div class="row">
+          <div class="col-lg-5 col-md-4 col-sm-6 portfolio-item" style = 'background-color: #fff; '>
+            <img src="http://localhost/symfonycalendar/public/bower_components/Ionicons/png/512/active{{ entry.active }}.png"  width="20 " height="20" alt="" />
+            {{ entry.weight }}
             <img src="http://localhost/symfonycalendar/public/files/immagini/{{ entry.gallery }}"  width="60" height="60" alt="" />
-            {{ entry.name }}<br>
-            <a href="modify/{{ entry.id }}">Modifica</a>
+            {{ entry.name }}
+            <a href="modify/{{ entry.id }}">
+              <img src="http://localhost/symfonycalendar/public/bower_components/Ionicons/png/512/edit.png"  width="20 " height="20" alt="" /> Modifica</a>
             {% if entry.delete == 1 %}
-            <a href="remove/{{ entry.id }}">Cancella</a>
+            <a href="remove/{{ entry.id }}">
+              <img src="http://localhost/symfonycalendar/public/bower_components/Ionicons/png/512/android-remove.png"  width="20 " height="20" alt="" /> Cancella</a>
             {% endif %}
           </div>
+          </div>
         {% endfor %}
-      </div>
-      <a href="new">Nuovo Argomento</a>
+      <a href="new"><img src="http://localhost/symfonycalendar/public/bower_components/Ionicons/png/512/android-add.png"  width="20 " height="20" alt="" />
+      <strong>Nuovo Argomento</strong></a>
     </div>
   </section>
 </div>

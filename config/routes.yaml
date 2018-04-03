@@ -12,6 +12,12 @@ eventedit:
     controller: App\Controller\AdminController::eventedit
     requirements:
         id: '\d+'
+eventremove:
+    path: admin/event/remove/{id}
+    controller: App\Controller\AdminController::removeevent
+    requirements:
+        id: '\d+'
+
 topicall:
     path: /admin/topic/
     controller: App\Controller\AdminController::alltopic
@@ -29,6 +35,68 @@ topicremove:
     controller: App\Controller\AdminController::topicremove
     requirements:
         id: '\d+'
+teacher:
+    path: /admin/teacher/new
+    controller: App\Controller\AdminController::teacher
+teacheredit:
+    path: /admin/teacher/edit
+    controller: App\Controller\AdminController::teacheredit
+teachermodify:
+    path: /admin/teacher/modify/{id}
+    controller: App\Controller\AdminController::teachermodify
+teacherremove:
+    path: admin/teacher/remove/{id}
+    controller: App\Controller\AdminController::removeteacher
+    requirements:
+        id: '\d+'
+teacherall:
+    path: /admin/teacher
+    controller: App\Controller\AdminController::allteacher
+
+typeall:
+    path: /admin/type
+    controller: App\Controller\AdminController::alltype
+type:
+    path: /admin/type/new
+    controller: App\Controller\AdminController::type
+typeedit:
+    path: /admin/type/edit
+    controller: App\Controller\AdminController::typeedit
+typeremove:
+    path: admin/type/remove/{id}
+    controller: App\Controller\AdminController::removetype
+    requirements:
+        id: '\d+'
+
+place:
+    path: /admin/place
+    controller: App\Controller\AdminController::place
+placeedit:
+    path: /admin/place/edit
+    controller: App\Controller\AdminController::placeedit
+placeremove:
+    path: admin/place/remove/{id}
+    controller: App\Controller\AdminController::removeplace
+    requirements:
+        id: '\d+'
+placeall:
+    path: /admin/place/all
+    controller: App\Controller\AdminController::allplace
+user:
+    path: /admin/user
+    controller: App\Controller\AdminController::user
+useredit:
+    path: /admin/useredit
+    controller: App\Controller\AdminController::useredit
+userremove:
+    path: /user/remove/{id}
+    controller: App\Controller\AdminController::removeuser
+    requirements:
+        id: '\d+'
+userall:
+    path: /admin/user/all
+    controller: App\Controller\AdminController::alluser
+
 usertype:
     path: /admin/usertype/
     controller: App\Controller\AdminController::usertype
@@ -45,67 +113,6 @@ removeusertype:
     controller: App\Controller\AdminController::removeusertype
     requirements:
         id: '\d+'
-teacher:
-    path: /admin/teacher
-    controller: App\Controller\AdminController::teacher
-type:
-    path: /admin/type
-    controller: App\Controller\AdminController::type
-place:
-    path: /admin/place
-    controller: App\Controller\AdminController::place
-teacheredit:
-    path: /admin/teacher/edit
-    controller: App\Controller\AdminController::teacheredit
-typeedit:
-    path: /admin/type/edit
-    controller: App\Controller\AdminController::typeedit
-placeedit:
-    path: /admin/place/edit
-    controller: App\Controller\AdminController::placeedit
-eventremove:
-    path: admin/event/remove/{id}
-    controller: App\Controller\AdminController::removeevent
-    requirements:
-        id: '\d+'
-placeremove:
-    path: admin/place/remove/{id}
-    controller: App\Controller\AdminController::removeplace
-    requirements:
-        id: '\d+'
-teacherremove:
-    path: admin/teacher/remove/{id}
-    controller: App\Controller\AdminController::removeteacher
-    requirements:
-        id: '\d+'
-typeremove:
-    path: admin/type/remove/{id}
-    controller: App\Controller\AdminController::removetype
-    requirements:
-        id: '\d+'
-user:
-    path: /admin/user
-    controller: App\Controller\AdminController::user
-useredit:
-    path: /admin/useredit
-    controller: App\Controller\AdminController::useredit
-userremove:
-    path: /user/remove/{id}
-    controller: App\Controller\AdminController::removeuser
-    requirements:
-        id: '\d+'
-placeall:
-    path: /admin/place/all
-    controller: App\Controller\AdminController::allplace
-typeall:
-    path: /admin/type/all
-    controller: App\Controller\AdminController::alltype
-teacherall:
-    path: /admin/teacher/all
-    controller: App\Controller\AdminController::allteacher
-userall:
-    path: /admin/user/all
-    controller: App\Controller\AdminController::alluser
 login:
     path: /login
     controller: App\Controller\SecurityController::login

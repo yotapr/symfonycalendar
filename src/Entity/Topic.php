@@ -3,8 +3,18 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\EntityRepository;
+
+class UserRepository extends EntityRepository
+{
+    public function findAll()
+    {
+        return $this->findBy(array(), array('username' => 'ASC'));
+    }
+}
 
 /**
+ * @ORM\Table(name="topic")
  * @ORM\Entity(repositoryClass="App\Repository\TopicRepository")
  */
 class Topic
@@ -31,6 +41,12 @@ class Topic
      *
      */
     private $gallery;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $weight;
+
 
     private $delete;
 
@@ -118,4 +134,43 @@ class Topic
 
         return $this;
     }
+
+    /**
+     * Set the value of Id
+     *
+     * @param mixed id
+     *
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Weight
+     *
+     * @return mixed
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * Set the value of Weight
+     *
+     * @param mixed weight
+     *
+     * @return self
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
 }

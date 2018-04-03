@@ -1,18 +1,17 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <div class="content-wrapper">
-<section class="content">
-<div class="container">
-<div class="row">
-{% for entry in type %}
-<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item" style = 'background-color: #fff; '>
-  {{ entry.name }}
-  <a href="remove/{{ entry.id }}">Cancella</a>
-</div>
-{% endfor %}
-
-</div>
-</div>
-</section>
+  <section class="content">
+    <div class="container">
+      {% for entry in type %}
+      <div class="row">
+        <div class="col-lg-5 col-md-4 col-sm-6 portfolio-item" style = 'background-color: #fff; '>
+          {{ entry.name }}
+          <a href="remove/{{ entry.id }}">Cancella</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
 </div>
 {% endblock %}
