@@ -315,13 +315,19 @@ class AdminController extends Controller
         ->findAll();
     foreach ($teacherall as $singleteacher) {
       $id = $singleteacher->getId();
-      $teacherselect[''] = "";
-      $teacherselect[$singleteacher->getName()] = $id;
+      if($singleteacher->getActive())
+      {
+        $teacherselect[''] = "";
+        $teacherselect[$singleteacher->getName()] = $id;
+      }
     }
     foreach ($topicall as $singletopic) {
       $id = $singletopic->getId();
-      $topicselect[''] = "";
-      $topicselect[$singletopic->getName()] = $id;
+      if($singleteacher->getActive())
+      {
+        $topicselect[''] = "";
+        $topicselect[$singletopic->getName()] = $id;
+      }
     }
     foreach ($typeall as $singletype) {
       $id = $singletype->getId();
