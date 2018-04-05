@@ -26,6 +26,8 @@ class Type
      */
     private $coursetype;
 
+    private $delete;
+
     // add your own fields
 
     /**
@@ -82,6 +84,45 @@ class Type
     public function setCoursetype($coursetype)
     {
         $this->coursetype = $coursetype;
+
+        return $this;
+    }
+
+
+    /**
+     * Set the value of Id
+     *
+     * @param mixed id
+     *
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Delete
+     *
+     * @return mixed
+     */
+    public function getDelete()
+    {
+        return $this->delete;
+    }
+
+    /**
+     * Set the value of Delete
+     *
+     * @param mixed delete
+     *
+     * @return self
+     */
+    public function setDelete($delete)
+    {
+        $this->delete = $delete;
 
         return $this;
     }

@@ -24,7 +24,7 @@ class AdminController extends Controller
   {
     $usertype = new Usertype();
     $form = $this->createFormBuilder($usertype);
-    $form->add('usertype', TextType::class, array('required'   => true));
+    $form->add('usertype', TextType::class, array('required'   => true, 'label' => 'Tipo di utente '));
     $form->add('save', SubmitType::class, array('label'=> 'Invia'));
     $form = $form->getForm();
     $form->handleRequest($request);
@@ -33,9 +33,34 @@ class AdminController extends Controller
       $em = $this->getDoctrine()->getManager();
       $em->persist($usertype);
       $em->flush();
-      return $this->redirectToRoute('viewusertype');
+      return $this->redirectToRoute('usertypeall');
     }
     return $this->render('usertype.html.twig', array('form' => $form->createView()));
+  }
+
+  public function usertypemodify($id, Request $request)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $type = $em->getRepository(Usertype::class)->find($id);
+    if (!$type)
+    {
+      throw $this->createNotFoundException('Nessun tipo di utente trovato per questo id '.$id);
+    } else {
+      $form = $this->createFormBuilder();
+      $form->add("usertype", TextType::class, array( 'data' => $type->getUsertype(), 'label' => 'Tipo di utente '));
+      $form->add('save', SubmitType::class, array('label' => 'Invia'));
+      $form->add("id", HiddenType::class, array( 'data' => $type->getId()));
+      $form = $form->getForm();
+      $form->handleRequest($request);
+      if ($form->isSubmitted() && $form->isValid()) {
+        $form = $form->getData();
+        $usertypeedit = $em->getRepository(Usertype::class)->find($form['id']);
+        $usertypeedit->setUsertype($form['usertype']);
+        $em->flush();
+        return $this->redirectToRoute('usertypeall');
+      }
+    }
+    return $this->render('usertypemodify.html.twig', array('type' => $type, 'form' => $form->createView()));
   }
 
   public function editusertype(Request $request, $id)
@@ -67,11 +92,8 @@ class AdminController extends Controller
     $query = $this->getDoctrine()->getRepository(Usertype::class)->find($id);
     $em->remove($query);
     $em->flush();
-    return $this->redirectToRoute('viewusertype');
+    return $this->redirectToRoute('usertypeall');
   }
-
-
-
 
   public function viewusertype(Request $request)
   {
@@ -116,13 +138,13 @@ class AdminController extends Controller
       $placeselect[$singleplace->getName()] = $id;
     }
     $formadd = $this->createFormBuilder($event);
-    $formadd->add("title", TextType::class, array('required'   => true));
-    $formadd->add("start", DateTimeType::class, array('required'   => true));
-    $formadd->add("end", DateTimeType::class, array('required'   => true));
-    $formadd->add("teacher", ChoiceType::class, array('required'   => true, 'choices'  => $teacherselect));
-    $formadd->add("place", ChoiceType::class, array('required'   => true, 'choices'  => $placeselect));
-    $formadd->add("course", ChoiceType::class, array('required'   => true, 'choices'  => $typeselect));
-    $formadd->add("topic", ChoiceType::class, array('required'   => true, 'choices'  => $topicselect));
+    $formadd->add("title", TextType::class, array('required'   => true, 'label' => 'Titolo'));
+    $formadd->add("topic", ChoiceType::class, array('required'   => true, 'choices'  => $topicselect, 'label' => 'Argomento'));
+    $formadd->add("course", ChoiceType::class, array('required'   => true, 'choices'  => $typeselect, 'label' => 'Tipo di corso'));
+    $formadd->add("teacher", ChoiceType::class, array('required'   => true, 'choices'  => $teacherselect, 'label' => 'Maestro'));
+    $formadd->add("place", ChoiceType::class, array('required'   => true, 'choices'  => $placeselect, 'label' => 'Luogo'));
+    $formadd->add("start", DateTimeType::class, array('required'   => true, 'label' => 'Dal'));
+    $formadd->add("end", DateTimeType::class, array('required'   => true, 'label' => 'Al'));
     $formadd->add('save', SubmitType::class, array('label' => 'Invia'));
     $formadd = $formadd->getForm();
     $formadd->handleRequest($request);
@@ -158,8 +180,11 @@ class AdminController extends Controller
       $place = $this->getDoctrine()
         ->getRepository(Place::class)
         ->find($idplace);
-      $place = $place->getAddress() . " - " . $place->getCity() . " (" . $place->getCountry() . ")";
+      $singleevent->setPlacename($place->getName());
+/*      $place = $place->getAddress() . " - " . $place->getCity() . " (" . $place->getCountry() . ")"; */
+      $place = $place->getCity() . " (" . $place->getCountry() . ")";
       $singleevent->setPlace($place);
+      $singleevent->setGallery($topic->getGallery());
     }
     return $this->render('admin.html.twig', array('form' => $formadd->createView(), 'event' => $eventall));
   }
@@ -175,6 +200,19 @@ class AdminController extends Controller
     $typeall = $this->getDoctrine()
       ->getRepository(Type::class)
       ->findAll();
+
+    foreach ($typeall as $typesingle) {
+      $typesingle->setDelete(1);
+      $id = $typesingle->getId();
+      foreach ($eventall as $singleevent) {
+        $idtype = $singleevent->getCoursetype();
+        if ($id == $idtype) {
+          /* type in uso non lo cancello */
+          $typesingle->setDelete(0);
+        }
+      }
+    }
+
     return $this->render('alltype.html.twig', array('type' => $typeall));
   }
 
@@ -199,6 +237,7 @@ class AdminController extends Controller
     }
     return $this->render('allteacher.html.twig', array('teacher' => $teacherall));
   }
+
   public function alluser()
   {
     $userall = $this->getDoctrine()
@@ -206,6 +245,16 @@ class AdminController extends Controller
       ->findAll();
     return $this->render('alluser.html.twig', array('user' => $userall));
   }
+
+  public function allusertype()
+  {
+    $usertypeall = $this->getDoctrine()
+      ->getRepository(Usertype::class)
+      ->findAll();
+    return $this->render('allusertype.html.twig', array('usertype' => $usertypeall));
+  }
+
+
   public function alltopic()
   {
     $eventall = $this->getDoctrine()
@@ -230,11 +279,97 @@ class AdminController extends Controller
   }
   public function allplace()
   {
+    $eventall = $this->getDoctrine()
+      ->getRepository(Evento::class)
+      ->findAll();
     $placeall = $this->getDoctrine()
       ->getRepository(Place::class)
       ->findAll();
+      foreach ($placeall as $placesingle) {
+        $placesingle->setDelete(1);
+        $id = $placesingle->getId();
+        foreach ($eventall as $singleevent) {
+          $idplace = $singleevent->getPlace();
+          if ($id == $idplace) {
+            /* place in uso non lo cancello */
+            $placesingle->setDelete(0);
+          }
+        }
+      }
     return $this->render('allplace.html.twig', array('place' => $placeall));
   }
+
+  public function eventmodify(Request $request, $idedit)
+  {
+    $teacherall = $this->getDoctrine()
+      ->getRepository(Teacher::class)
+      ->findAll();
+    $topicall = $this->getDoctrine()
+      ->getRepository(Topic::class)
+      ->findAll();
+    $typeall = $this->getDoctrine()
+        ->getRepository(Type::class)
+        ->findAll();
+    $placeall = $this->getDoctrine()
+        ->getRepository(Place::class)
+        ->findAll();
+    foreach ($teacherall as $singleteacher) {
+      $id = $singleteacher->getId();
+      $teacherselect[''] = "";
+      $teacherselect[$singleteacher->getName()] = $id;
+    }
+    foreach ($topicall as $singletopic) {
+      $id = $singletopic->getId();
+      $topicselect[''] = "";
+      $topicselect[$singletopic->getName()] = $id;
+    }
+    foreach ($typeall as $singletype) {
+      $id = $singletype->getId();
+      $typeselect[''] = "";
+      $typeselect[$singletype->getCoursetype()] = $id;
+    }
+    foreach ($placeall as $singleplace) {
+      $id = $singleplace->getId();
+      $placeselect[''] = "";
+      $placeselect[$singleplace->getName()] = $id;
+    }
+    $em = $this->getDoctrine()->getManager();
+    $event = $em->getRepository(Evento::class)->find($idedit);
+    $form = $this->createFormBuilder();
+    $form->add("title", TextType::class, array('required'   => true, 'label' => 'Titolo', 'data' => $event->getTitle()));
+    $id = $event->getTopic();
+/*  $form->add("topic", TextType::class, array('required'   => true, 'label' => 'Argomento', 'data' => $selectedtopic->getName())); */
+/*  $form->add("topic", ChoiceType::class, array('required'   => true, 'label' => 'Argomento', 'is_selected' => $selectedtopic->getName(), 'choices'  => $topicselect)); */
+/*  $form->add("topic", ChoiceType::class, array('required'   => true, 'label' => 'Argomento', 'is_selected' => $event->getTopic(), 'choices'  => $topicselect)); */
+/*  $form->add("topic", ChoiceType::class, array('required'   => true, 'label' => 'Argomento', 'choices'  => $topicselect, 'selectedchoice'=> $event->getTopic())); */
+    $form->add("topic", ChoiceType::class, array('required'   => true, 'label' => 'Argomento', 'choices'  => $topicselect));
+    $form->add("course", ChoiceType::class, array('required'   => true, 'label' => 'Tipo di corso', 'choices'  => $typeselect));
+    $form->add("teacher", ChoiceType::class, array('required'   => true, 'label' => 'Maestro', 'choices'  => $teacherselect));
+    $form->add("place", ChoiceType::class, array('required'   => true, 'label' => 'Luogo', 'choices'  => $placeselect));
+    $form->add("start", DateTimeType::class, array('required'   => true, 'label' => 'Dal'));
+    $form->add("end", DateTimeType::class, array('required'   => true, 'label' => 'Al'));
+    $form->add("id", HiddenType::class, array('data' => $event->getId()));
+    $form->add('save', SubmitType::class, array('label' => 'Invia'));
+    $form = $form->getForm();
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $event = $form->getData();
+        $form = $form->getData();
+        $eventedit = $em->getRepository(Evento::class)->find($form['id']);
+        if (empty($form['attivo'])) $form['attivo'] = 0;
+        //$eventedit->setActive($form['attivo']);
+        $eventedit->setTitle($form['title']);
+        $eventedit->setStart($form['start']);
+        $eventedit->setEnd($form['end']);
+        $eventedit->setTeacher($form['teacher']);
+        $eventedit->setPlace($form['place']);
+        $eventedit->setTopic($form['topic']);
+        $em->flush();
+        //$event = $em->getRepository(Evento::class)->find($form['id']);
+        return $this->redirectToRoute('admin');
+      }
+    return $this->render('eventmodify.html.twig', array('form' => $form->createView()));  }
+
   public function eventedit(Request $request, $idedit)
   {
     $teacherall = $this->getDoctrine()
@@ -308,7 +443,8 @@ class AdminController extends Controller
     $topic->setName('Nome ');
     $form = $this->createFormBuilder($topic);
     $form->add("name", TextType::class, array('required'   => true, 'label' => 'Nome'));
-    $form->add("gallery", TextType::class, array('required'   => true, 'label' => 'Galleria', 'data' => $topic->getGallery()));
+    $form->add("gallery", TextType::class, array('required'   => true, 'label' => 'Icona', 'data' => 'Carica un`immagine'));
+    $form->add("weight", TextType::class, array('required'   => true, 'label' => 'Peso', 'data' => '0'));
     $form->add("active", CheckboxType::class, array('data' => true, 'label' => 'Attivo', 'required'   => false));
     $form->add('save', SubmitType::class, array('label' => 'Invia'));
     $form = $form->getForm();
@@ -331,11 +467,11 @@ class AdminController extends Controller
     $place->setCity('Città ');
     $place->setCountry('Provincia ');
     $form = $this->createFormBuilder($place);
-    $form->add("name", TextType::class, array('required'   => true));
-    $form->add("address", TextType::class, array('required'   => true));
-    $form->add("city", TextType::class, array('required'   => true));
-    $form->add("country", TextType::class, array('required'   => true));
-    $form->add("active", CheckboxType::class, array('data' => true, 'required'   => false));
+    $form->add("name", TextType::class, array('required'   => true, 'label' => 'Luogo '));
+    $form->add("address", TextType::class, array('required'   => true, 'label' => 'Indirizzo '));
+    $form->add("city", TextType::class, array('required'   => true, 'label' => 'Città '));
+    $form->add("country", TextType::class, array('required'   => true, 'label' => 'Provincia '));
+    $form->add("active", CheckboxType::class, array('data' => true, 'required'   => false, 'label' => 'Attivo '));
     $form->add('save', SubmitType::class, array('label' => 'Invia'));
     $form = $form->getForm();
     $form->handleRequest($request);
@@ -344,10 +480,45 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($place);
         $em->flush();
-        return $this->redirectToRoute('admin');
+        return $this->redirectToRoute('placeall');
     }
     return $this->render('place.html.twig', array('form' => $form->createView()));
   }
+
+  public function placemodify($id, Request $request)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $place = $em->getRepository(Place::class)->find($id);
+    if (!$place)
+    {
+      throw $this->createNotFoundException('Nessun luogo trovato per questo id '.$id);
+    } else {
+      $form = $this->createFormBuilder();
+      $form->add("name", TextType::class, array( 'data' => $place->getName(), 'label' => 'Luogo '));
+      $form->add("address", TextType::class, array( 'data' => $place->getAddress(), 'label' => 'Indirizzo '));
+      $form->add("city", TextType::class, array( 'data' => $place->getCity(), 'label' => 'Città '));
+      $form->add("country", TextType::class, array( 'data' => $place->getCountry(), 'label' => 'Provincia '));
+      $form->add("attivo", CheckboxType::class, array('data' => $place->getActive(), 'required'   => false, 'label' => 'attivo '));
+      $form->add('save', SubmitType::class, array('label' => 'Invia'));
+      $form->add("id", HiddenType::class, array( 'data' => $place->getId()));
+      $form = $form->getForm();
+      $form->handleRequest($request);
+      if ($form->isSubmitted() && $form->isValid()) {
+        $form = $form->getData();
+        $placeedit = $em->getRepository(Place::class)->find($form['id']);
+        $placeedit->setName($form['name']);
+        $placeedit->setAddress($form['address']);
+        $placeedit->setCity($form['city']);
+        $placeedit->setCountry($form['country']);
+        if (empty($form['attivo'])) $form['attivo'] = 0;
+        $placeedit->setActive($form['attivo']);
+        $em->flush();
+        return $this->redirectToRoute('placeall');
+      }
+    }
+    return $this->render('placemodify.html.twig', array('place' => $place, 'form' => $form->createView()));
+  }
+
   public function teacher(Request $request)
   {
     $teacher = new Teacher();
@@ -374,8 +545,8 @@ class AdminController extends Controller
     $type->setActive('Attivo ');
     $type->setCoursetype('Nome ');
     $form = $this->createFormBuilder($type);
-    $form->add("coursetype", TextType::class, array('required'   => true));
-    $form->add("active", CheckboxType::class, array('data' => true, 'required'   => false));
+    $form->add("coursetype", TextType::class, array('required'   => true, 'label' => 'Tipo di corso '));
+    $form->add("active", CheckboxType::class, array('data' => true, 'required'   => false, 'label' => 'Attivo '));
     $form->add('save', SubmitType::class, array('label' => 'Invia'));
     $form = $form->getForm();
     $form->handleRequest($request);
@@ -384,7 +555,7 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($teacher);
         $em->flush();
-        return $this->redirectToRoute('admin');
+        return $this->redirectToRoute('typeall');
     }
     return $this->render('type.html.twig', array('form' => $form->createView()));
   }
@@ -419,10 +590,11 @@ class AdminController extends Controller
     $type->setUsername('Nome ');
     $type->setPassword('Password ');
     $form = $this->createFormBuilder($type);
-    $form->add("is_active", CheckboxType::class, array('data' => true, 'required'   => false));
-    $form->add("username", TextType::class, array('required'   => true));
-    $form->add("password", TextType::class, array('required'   => true));
-    $form->add("email", TextType::class, array('required'   => true));
+    $form->add("username", TextType::class, array('required'   => true, 'label' => 'Utente '));
+    $form->add("email", TextType::class, array('required'   => true, 'label' => 'Email '));
+    $form->add("password", TextType::class, array('required'   => true, 'label' => 'Password '));
+    $form->add("is_active", CheckboxType::class, array('data' => true, 'required'   => false, 'label' => 'Attivo '));
+/*    $form->add("roles", HiddenType::class, array( 'data' => 'ROLES_ADMIN')); */
     $form->add("save", SubmitType::class, array('label' => 'Invia'));
     $form = $form->getForm();
     $form->handleRequest($request);
@@ -440,6 +612,38 @@ class AdminController extends Controller
     }
     return $this->render('user.html.twig', array('form' => $form->createView()));
   }
+
+  public function usermodify($id, Request $request)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $user = $em->getRepository(User::class)->find($id);
+    if (!$user)
+    {
+      throw $this->createNotFoundException('Nessun Maestro trovato per questo id '.$id);
+    } else {
+      $form = $this->createFormBuilder();
+      $form->add("username", TextType::class, array( 'data' => $user->getUsername(), 'label' => 'Utente '));
+      $form->add("email", TextType::class, array( 'data' => $user->getEmail(), 'label' => 'Email '));
+      $form->add("password", TextType::class, array('label' => 'Nuova Password '));
+      $form->add("isactive", CheckboxType::class, array('data' => $user->getisActive(), 'required'   => false, 'label' => 'attivo '));
+      $form->add('save', SubmitType::class, array('label' => 'Invia'));
+      $form->add("id", HiddenType::class, array( 'data' => $user->getId()));
+      $form = $form->getForm();
+      $form->handleRequest($request);
+      if ($form->isSubmitted() && $form->isValid()) {
+        $form = $form->getData();
+        $useredit = $em->getRepository(User::class)->find($form['id']);
+        if (empty($form['attivo'])) $form['attivo'] = 0;
+        $useredit->setActive($form['attivo']);
+        $useredit->setName($form['name']);
+        $em->flush();
+        return $this->redirectToRoute('userall');
+      }
+    }
+    return $this->render('usermodify.html.twig', array('user' => $user, 'forms' => $form->createView()));
+  }
+
+
   public function useredit(Request $request)
   {
     $em = $this->getDoctrine()->getManager();
@@ -477,13 +681,13 @@ class AdminController extends Controller
     $topic = $em->getRepository(Topic::class)->find($id);
     if (!$topic)
       {
-        throw $this->createNotFoundException('No article found for id '.$id);
+        throw $this->createNotFoundException('Nessun argomento trovato per questo id '.$id);
       } else {
         $form = $this->createFormBuilder();
         $form->add("name", TextType::class, array('data' => $topic->getName(), 'required'   => false, 'label' => 'Nome '));
         $form->add("weight", TextType::class, array('required'   => true, 'label' => 'Peso ', 'data' => $topic->getWeight() ));
-        $form->add("attivo", CheckboxType::class, array('data' => $topic->getActive(), 'required'   => false, 'label' => 'attivo '));
         $form->add("image", TextType::class, array('required'   => true, 'label' => 'Icona ', 'data' => $topic->getGallery()));
+        $form->add("attivo", CheckboxType::class, array('data' => $topic->getActive(), 'required'   => false, 'label' => 'attivo '));
         $form->add('save', SubmitType::class, array('label' => 'Invia'));
         $form->add("id", HiddenType::class, array( 'data' => $topic->getId()));
         $form = $form->getForm();
@@ -509,9 +713,9 @@ class AdminController extends Controller
     $topic = $em->getRepository(Topic::class)->findAll();
     foreach ($topic as $topicsingle) {
         $form = $this->createFormBuilder();
-        $form->add("attivo", CheckboxType::class, array('data' => $topicsingle->getActive(), 'required'   => false, 'label' => $topicsingle->getName()));
         $form->add("name", TextType::class, array('data' => $topicsingle->getName(), 'required'   => false, 'label' => 'Nome '));
         $form->add("image", TextType::class, array('required'   => true, 'data' => $topicsingle->getGallery()));
+        $form->add("attivo", CheckboxType::class, array('data' => $topicsingle->getActive(), 'required'   => false, 'label' => $topicsingle->getName()));
         $form->add('save', SubmitType::class, array('label' => 'Invia'));
         $form->add("id", HiddenType::class, array( 'data' => $topicsingle->getId()));
         $form = $form->getForm();
@@ -522,11 +726,11 @@ class AdminController extends Controller
         $form = $form->getData();
         $topicedit = $em->getRepository(Topic::class)->find($form['id']);
         if (empty($form['attivo'])) $form['attivo'] = 0;
-        $topicedit->setActive($form['attivo']);
         $topicedit->setName($form['name']);
         $topicedit->setImage($form['image']);
+        $topicedit->setActive($form['attivo']);
         $em->flush();
-        return $this->redirectToRoute('admin');
+        return $this->redirectToRoute('topicall');
       }
     return $this->render('topicedit.html.twig', array('topic' => $topic, 'forms' => $forms));
   }
@@ -594,7 +798,7 @@ class AdminController extends Controller
     $teacher = $em->getRepository(Teacher::class)->find($id);
     if (!$teacher)
     {
-      throw $this->createNotFoundException('No article found for id '.$id);
+      throw $this->createNotFoundException('Nessun Maestro trovato per questo id '.$id);
     } else {
       $form = $this->createFormBuilder();
       $form->add("name", TextType::class, array( 'data' => $teacher->getName(), 'label' => 'Nome '));
@@ -642,6 +846,39 @@ class AdminController extends Controller
       }
     return $this->render('typeedit.html.twig', array('forms' => $forms));
   }
+
+  public function typemodify($id, Request $request)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $type = $em->getRepository(Type::class)->find($id);
+    if (!$type)
+    {
+      throw $this->createNotFoundException('Nessun tipo di corso trovato per questo id '.$id);
+    } else {
+      $form = $this->createFormBuilder();
+      $form->add("coursetype", TextType::class, array( 'data' => $type->getCoursetype(), 'label' => 'Tipo di corso '));
+      /*
+      $form->add("attivo", CheckboxType::class, array('data' => $type->getActive(), 'required'   => false, 'label' => 'attivo '));
+      */
+      $form->add('save', SubmitType::class, array('label' => 'Invia'));
+      $form->add("id", HiddenType::class, array( 'data' => $type->getId()));
+      $form = $form->getForm();
+      $form->handleRequest($request);
+      if ($form->isSubmitted() && $form->isValid()) {
+        $form = $form->getData();
+        $typeedit = $em->getRepository(Type::class)->find($form['id']);
+        /*
+        if (empty($form['attivo'])) $form['attivo'] = 0;
+        $typeedit->setActive($form['attivo']);
+        */
+        $typeedit->setCoursetype($form['coursetype']);
+        $em->flush();
+        return $this->redirectToRoute('typeall');
+      }
+    }
+    return $this->render('typemodify.html.twig', array('type' => $type, 'form' => $form->createView()));
+  }
+
   public function removeevent($id)
   {
     $em = $this->getDoctrine()->getManager();
@@ -705,7 +942,7 @@ class AdminController extends Controller
   public function removetype($id)
   {
     $em = $this->getDoctrine()->getManager();
-    $type = $em->getRepository(Topic::class)->find($id);
+    $type = $em->getRepository(Type::class)->find($id);
     if (!$type) {
         throw $this->createNotFoundException(
             'No article found for id '.$id
@@ -737,9 +974,7 @@ class AdminController extends Controller
       $em = $this->getDoctrine()->getManager();
       $user = $em->getRepository(User::class)->findOneBy(array('recoverpasswordlink' => $keyurl));
       if (!$user) {
-          throw $this->createNotFoundException(
-              'No user found '
-          );
+          throw $this->createNotFoundException('No user found ');
       }
       else {
         $form = $this->createFormBuilder()

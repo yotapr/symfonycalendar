@@ -56,6 +56,12 @@ class Evento
      */
     private $topic;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $coursetype;
+
+
     // used for display place.name
     private $placename;
 
@@ -320,5 +326,44 @@ class Evento
 
 
 
+
+
+    /**
+     * Set the value of Id
+     *
+     * @param mixed id
+     *
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Coursetype
+     * 
+     * @return mixed
+     */
+    public function getCoursetype()
+    {
+        return $this->coursetype;
+    }
+
+    /**
+     * Set the value of Coursetype
+     *
+     * @param mixed coursetype
+     *
+     * @return self
+     */
+    public function setCoursetype($coursetype)
+    {
+        $this->coursetype = $coursetype;
+
+        return $this;
+    }
 
 }

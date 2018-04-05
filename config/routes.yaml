@@ -7,6 +7,12 @@ calendario:
 admin:
     path: /admin/
     controller: App\Controller\AdminController::index
+
+eventmodify:
+    path: /admin/event/modify/{idedit}
+    controller: App\Controller\AdminController::eventmodify
+    requirements:
+        id: '\d+'
 eventedit:
     path: /admin/event/edit/{idedit}
     controller: App\Controller\AdminController::eventedit
@@ -62,43 +68,57 @@ type:
 typeedit:
     path: /admin/type/edit
     controller: App\Controller\AdminController::typeedit
+typemodify:
+    path: /admin/type/modify/{id}
+    controller: App\Controller\AdminController::typemodify
 typeremove:
     path: admin/type/remove/{id}
     controller: App\Controller\AdminController::removetype
     requirements:
         id: '\d+'
-
-place:
+placeall:
     path: /admin/place
+    controller: App\Controller\AdminController::allplace
+place:
+    path: /admin/place/new
     controller: App\Controller\AdminController::place
 placeedit:
     path: /admin/place/edit
     controller: App\Controller\AdminController::placeedit
+placemodify:
+    path: /admin/place/modify/{id}
+    controller: App\Controller\AdminController::placemodify
 placeremove:
     path: admin/place/remove/{id}
     controller: App\Controller\AdminController::removeplace
     requirements:
         id: '\d+'
-placeall:
-    path: /admin/place/all
-    controller: App\Controller\AdminController::allplace
-user:
+userall:
     path: /admin/user
+    controller: App\Controller\AdminController::alluser
+user:
+    path: /admin/user/new
     controller: App\Controller\AdminController::user
 useredit:
     path: /admin/useredit
     controller: App\Controller\AdminController::useredit
+usermodify:
+    path: /admin/user/modify/{id}
+    controller: App\Controller\AdminController::usermodify
 userremove:
-    path: /user/remove/{id}
+    path: admin/user/remove/{id}
     controller: App\Controller\AdminController::removeuser
     requirements:
         id: '\d+'
-userall:
-    path: /admin/user/all
-    controller: App\Controller\AdminController::alluser
 
+usertypeall:
+    path: /admin/usertype
+    controller: App\Controller\AdminController::allusertype
+usertypemodify:
+    path: /admin/usertype/modify/{id}
+    controller: App\Controller\AdminController::usertypemodify
 usertype:
-    path: /admin/usertype/
+    path: /admin/usertype/new
     controller: App\Controller\AdminController::usertype
 viewusertype:
     path: /admin/viewusertype/
@@ -109,7 +129,7 @@ editusertype:
     requirements:
         id: '\d+'
 removeusertype:
-    path: /admin/removeusertype/{id}
+    path: /admin/usertype/remove/{id}
     controller: App\Controller\AdminController::removeusertype
     requirements:
         id: '\d+'

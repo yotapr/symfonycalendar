@@ -5,12 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <title>{% block title %}Symfony Calendar{% endblock %}</title>
+        <link rel="shortcut icon" href="{{ asset('files/immagini/favicon.ico') }}" />
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
             <link rel="stylesheet" href="{{ asset('bower_components/font-awesome/css/font-awesome.min.css') }}">
             <link rel="stylesheet" href="{{ asset('bower_components/Ionicons/css/ionicons.min.css') }}">
             <link rel="stylesheet" href="{{ asset('dist/css/AdminLTE.min.css') }}">
             <link rel="stylesheet" href="{{ asset('dist/css/skins/skin-blue.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('dist/css/custom.css') }}">
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
         {% endblock %}
     </head>
@@ -84,9 +86,8 @@
           </span>
       </a>
       <ul class="treeview-menu">
-        <li><a href="{{ app.request.getBaseURL() }}/admin/place">Nuovo luogo</a></li>
-        <li><a href="{{ app.request.getBaseURL() }}/admin/place/edit">Modifica luogo</a></li>
-        <li><a href="{{ app.request.getBaseURL() }}/admin/place/all">Cancella luogo</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/place">Tutti i luohi</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/place/new">Nuovo luogo</a></li>
       </ul>
     </li>
     <li class="treeview">
@@ -96,9 +97,19 @@
           </span>
       </a>
       <ul class="treeview-menu">
-        <li><a href="{{ app.request.getBaseURL() }}/admin/user">Nuovo utente</a></li>
-        <li><a href="{{ app.request.getBaseURL() }}/admin/user/edit">Modifica utente</a></li>
-        <li><a href="{{ app.request.getBaseURL() }}/admin/user/all">Cancella utenti</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/user">Tutti gli utenti</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/user/new">Nuovo utente</a></li>
+      </ul>
+    </li>
+    <li class="treeview">
+      <a href="#"><i class="fa fa-link"></i> <span>Tipi di Utente</span>
+        <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+      </a>
+      <ul class="treeview-menu">
+        <li><a href="{{ app.request.getBaseURL() }}/admin/usertype">Tutti i tipi di utenti</a></li>
+        <li><a href="{{ app.request.getBaseURL() }}/admin/usertype/new">Nuovo tipo di utente</a></li>
       </ul>
     </li>
   </ul>

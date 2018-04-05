@@ -1,29 +1,72 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <div class="content-wrapper">
-<section class="content">
-<div class="container">
-<div class="row">
-  Menu admin
-  {{ form_start(form) }}
-  {{ form_widget(form) }}
-  {{ form_end(form) }}
-{% for entry in event %}
-<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item" style = 'background-color: #fff; '>
-  {{ entry.date|date('d-m-Y') }}
-  {{ entry.title }}
-  {{ entry.teacher }}
-  {{ entry.start|date('d-m-Y') }}
-  {{ entry.end|date('d-m-Y') }}
-  {{ entry.place }}
-  {{ entry.course }}
-  {{ entry.topic }}
-  <a href="event/remove/{{ entry.id }}">Cancella</a>
-</div>
-{% endfor %}
-
-</div>
-</div>
-</section>
+  <section class="content">
+    <div class="container">
+      <h2>Gestione eventi</h2>
+        <div class="row row-item">
+          {{ form_start(form) }}
+          {{ form_widget(form) }}
+          {{ form_end(form) }}
+        </div>
+        <p> </p>
+        <div class="row row-title">
+            <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+              Data
+            </div>
+            <div class="col-lg-4 col-md-2 col-sm-2 portfolio-item">
+              Titolo
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+              Maestro / Luogo
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+              prenota
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+              Peso<br />
+              visibile
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+              Azioni
+            </div>
+          </div>
+        {% for entry in event %}
+        <div class="row row-item">
+          <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+            <img src="{{ asset('files/immagini/') }}{{ entry.gallery }}"  width="60" height="60" alt="" />
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+            <em>da</em> {{ entry.start|date('D d/m/Y') }} - {{ entry.start|date('H:i') }}<br />
+            <em>a</em> {{ entry.end|date('D d/m/Y') }} - {{ entry.start|date('H:i') }}
+          </div>
+          <div class="col-lg-4 col-md-2 col-sm-2 portfolio-item">
+            <strong>{{ entry.title }}</strong><br />
+            {{ entry.topic }}<br />
+            <em>{{ entry.course }}</em>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+            <strong>{{ entry.teacher }}</strong><br />
+            {{ entry.placename }} <br />
+            <i>{{ entry.place }}</i>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+            prenota
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+            Peso<br />
+            visibile
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+            <a href="event/modify/{{ entry.id }}">modifica</a><br />
+            duplica<br />
+            <a href="event/remove/{{ entry.id }}">cancella</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
 </div>
 {% endblock %}
