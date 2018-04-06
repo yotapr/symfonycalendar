@@ -7,7 +7,9 @@ calendario:
 admin:
     path: /admin/
     controller: App\Controller\AdminController::index
-
+eventall:
+    path: /admin/event/
+    controller: App\Controller\AdminController::allevent
 eventmodify:
     path: /admin/event/modify/{idedit}
     controller: App\Controller\AdminController::eventmodify
@@ -23,6 +25,9 @@ eventremove:
     controller: App\Controller\AdminController::removeevent
     requirements:
         id: '\d+'
+event:
+    path: /admin/event/new
+    controller: App\Controller\AdminController::event
 
 topicall:
     path: /admin/topic/
@@ -36,6 +41,8 @@ topicedit:
 topicmodify:
     path: /admin/topic/modify/{id}
     controller: App\Controller\AdminController::topicmodify
+    requirements:
+        id: '\d+'
 topicremove:
     path: admin/topic/remove/{id}
     controller: App\Controller\AdminController::topicremove
@@ -50,6 +57,8 @@ teacheredit:
 teachermodify:
     path: /admin/teacher/modify/{id}
     controller: App\Controller\AdminController::teachermodify
+    requirements:
+        id: '\d+'
 teacherremove:
     path: admin/teacher/remove/{id}
     controller: App\Controller\AdminController::removeteacher
@@ -71,6 +80,8 @@ typeedit:
 typemodify:
     path: /admin/type/modify/{id}
     controller: App\Controller\AdminController::typemodify
+    requirements:
+        id: '\d+'
 typeremove:
     path: admin/type/remove/{id}
     controller: App\Controller\AdminController::removetype
@@ -88,6 +99,8 @@ placeedit:
 placemodify:
     path: /admin/place/modify/{id}
     controller: App\Controller\AdminController::placemodify
+    requirements:
+        id: '\d+'
 placeremove:
     path: admin/place/remove/{id}
     controller: App\Controller\AdminController::removeplace
@@ -105,18 +118,21 @@ useredit:
 usermodify:
     path: /admin/user/modify/{id}
     controller: App\Controller\AdminController::usermodify
+    requirements:
+        id: '\d+'
 userremove:
     path: admin/user/remove/{id}
     controller: App\Controller\AdminController::removeuser
     requirements:
         id: '\d+'
-
 usertypeall:
     path: /admin/usertype
     controller: App\Controller\AdminController::allusertype
 usertypemodify:
     path: /admin/usertype/modify/{id}
     controller: App\Controller\AdminController::usertypemodify
+    requirements:
+        id: '\d+'
 usertype:
     path: /admin/usertype/new
     controller: App\Controller\AdminController::usertype

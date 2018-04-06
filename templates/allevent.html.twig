@@ -4,22 +4,21 @@
   <section class="content">
     <div class="container">
       <h2>Gestione eventi</h2>
-        <div class="row row-item">
-          {{ form_start(form) }}
-          {{ form_widget(form) }}
-          {{ form_end(form) }}
-        </div>
+      <em>MANCA FILTRO PER LA SCELTA</em>
         <p> </p>
+        <a href="event/new">
+        <img src="{{ asset('bower_components/Ionicons/png/512/android-add.png') }}" width="20" height="20" alt="Nuovo" />
+        <strong>Nuovo evento</strong></a>
         <div class="row row-title">
             <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
               Data
             </div>
-            <div class="col-lg-4 col-md-2 col-sm-2 portfolio-item">
+            <div class="col-lg-3 col-md-2 col-sm-2 portfolio-item">
               Titolo
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+            <div class="col-lg-3 col-md-2 col-sm-2 portfolio-item">
               Maestro / Luogo
             </div>
             <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
@@ -34,7 +33,7 @@
             </div>
           </div>
         {% for entry in event %}
-        <div class="row row-item">
+        <div class="row row-item-active{{ entry.active }}">
           <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
             <img src="{{ asset('files/immagini/') }}{{ entry.gallery }}"  width="60" height="60" alt="" />
           </div>
@@ -42,12 +41,12 @@
             <em>da</em> {{ entry.start|date('D d/m/Y') }} - {{ entry.start|date('H:i') }}<br />
             <em>a</em> {{ entry.end|date('D d/m/Y') }} - {{ entry.start|date('H:i') }}
           </div>
-          <div class="col-lg-4 col-md-2 col-sm-2 portfolio-item">
+          <div class="col-lg-3 col-md-2 col-sm-2 portfolio-item">
             <strong>{{ entry.title }}</strong><br />
             {{ entry.topic }}<br />
-            <em>{{ entry.course }}</em>
+            <em>{{ entry.coursetype }}</em>
           </div>
-          <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+          <div class="col-lg-3 col-md-2 col-sm-2 portfolio-item">
             <strong>{{ entry.teacher }}</strong><br />
             {{ entry.placename }} <br />
             <i>{{ entry.place }}</i>
@@ -56,16 +55,19 @@
             prenota
           </div>
           <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
-            Peso<br />
-            visibile
+            {{ entry.weight }}<br />
+            <img src="{{ asset('bower_components/Ionicons/png/512/') }}active{{ entry.active }}.png"  width="20" height="20" alt="Attivo" />
           </div>
           <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
-            <a href="event/modify/{{ entry.id }}">modifica</a><br />
+            <a href="modify/{{ entry.id }}">modifica</a><br />
             duplica<br />
-            <a href="event/remove/{{ entry.id }}">cancella</a>
+            <a href="remove/{{ entry.id }}">cancella</a>
           </div>
         </div>
       {% endfor %}
+      <a href="new">
+      <img src="{{ asset('bower_components/Ionicons/png/512/android-add.png') }}" width="20" height="20" alt="Nuovo" />
+      <strong>Nuovo evento</strong></a>
     </div>
   </section>
 </div>

@@ -74,30 +74,35 @@ class CalendarController extends Controller
 /*          ->findAll(); */
       }
       foreach ($event as $singleevent) {
+
+/***  teacher  ***/
         $idteacher = $singleevent->getTeacher();
-        $idtopic = $singleevent->getTopic();
-        $idcoursetype = $singleevent->getCourse();
-        $idplace = $singleevent->getPlace();
         $teacher = $this->getDoctrine()
           ->getRepository(Teacher::class)
           ->find($idteacher);
         $singleevent->setTeacher($teacher->getName());
-        $topic = $this->getDoctrine()
-          ->getRepository(Topic::class)
-          ->find($idtopic);
-        $singleevent->setTopic($topic->getName());
-        $singleevent->setGallery($topic->getGallery());
-        $coursetype = $this->getDoctrine()
-          ->getRepository(Type::class)
-          ->find($idcoursetype);
-        $singleevent->setCourse($coursetype->getCoursetype());
-
+/***  place  ***/
+        $idplace = $singleevent->getPlace();
         $place = $this->getDoctrine()
           ->getRepository(Place::class)
           ->find($idplace);
         $place1 = $place->getAddress() . " - " . $place->getCity() . " (" . $place->getCountry() . ")";
         $singleevent->setPlace($place1);
         $singleevent->setPlacename($place->getName());
+/***  topic  ****/
+        $idtopic = $singleevent->getTopic();
+/*        $idcoursetype = $singleevent->getCourse(); */
+        $topic = $this->getDoctrine()
+          ->getRepository(Topic::class)
+          ->find($idtopic);
+        $singleevent->setTopic($topic->getName());
+        $singleevent->setGallery($topic->getGallery());
+/***  coursetype  ****/
+        $idcoursetype = $singleevent->getCoursetype();
+        $coursetype = $this->getDoctrine()
+          ->getRepository(Type::class)
+          ->find($idcoursetype);
+        $singleevent->setCoursetype($coursetype->getCoursetype());
       }
       if (!$event) {
         return new Response(

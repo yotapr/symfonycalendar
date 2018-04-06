@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -101,82 +102,24 @@ class AdminController extends Controller
     return $this->render('viewusertype.html.twig', array('viewusertype' => $showusertype ));
   }
 
-  public function index(Request $request)
+  public function index(Request $request){
+    return $this->render('dashboard.html.twig');
+  }
+
+  public function allevent(Request $request)
   {
-    $event = new Evento();
-    $event->setTitle('Titolo ');
-    $teacherall = $this->getDoctrine()
-      ->getRepository(Teacher::class)
-      ->findAll();
-    $topicall = $this->getDoctrine()
-      ->getRepository(Topic::class)
-      ->findAll();
-    $typeall = $this->getDoctrine()
-        ->getRepository(Type::class)
-        ->findAll();
-    $placeall = $this->getDoctrine()
-        ->getRepository(Place::class)
-        ->findAll();
-    foreach ($teacherall as $singleteacher) {
-      $id = $singleteacher->getId();
-      $teacherselect[''] = "";
-      $teacherselect[$singleteacher->getName()] = $id;
-    }
-    foreach ($topicall as $singletopic) {
-      $id = $singletopic->getId();
-      $topicselect[''] = "";
-      $topicselect[$singletopic->getName()] = $id;
-    }
-    foreach ($typeall as $singletype) {
-      $id = $singletype->getId();
-      $typeselect[''] = "";
-      $typeselect[$singletype->getCoursetype()] = $id;
-    }
-    foreach ($placeall as $singleplace) {
-      $id = $singleplace->getId();
-      $placeselect[''] = "";
-      $placeselect[$singleplace->getName()] = $id;
-    }
-    $formadd = $this->createFormBuilder($event);
-    $formadd->add("title", TextType::class, array('required'   => true, 'label' => 'Titolo'));
-    $formadd->add("topic", ChoiceType::class, array('required'   => true, 'choices'  => $topicselect, 'label' => 'Argomento'));
-    $formadd->add("course", ChoiceType::class, array('required'   => true, 'choices'  => $typeselect, 'label' => 'Tipo di corso'));
-    $formadd->add("teacher", ChoiceType::class, array('required'   => true, 'choices'  => $teacherselect, 'label' => 'Maestro'));
-    $formadd->add("place", ChoiceType::class, array('required'   => true, 'choices'  => $placeselect, 'label' => 'Luogo'));
-    $formadd->add("start", DateTimeType::class, array('required'   => true, 'label' => 'Dal'));
-    $formadd->add("end", DateTimeType::class, array('required'   => true, 'label' => 'Al'));
-    $formadd->add('save', SubmitType::class, array('label' => 'Invia'));
-    $formadd = $formadd->getForm();
-    $formadd->handleRequest($request);
-    if ($formadd->isSubmitted() && $formadd->isValid()) {
-        $event = $formadd->getData();
-        $date = date('Y-m-d H:i:s');
-        $event->setDate(new \DateTime());
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($event);
-        $em->flush();
-        return $this->redirectToRoute('admin');
-    }
     $eventall = $this->getDoctrine()
       ->getRepository(Evento::class)
       ->findAll();
     foreach ($eventall as $singleevent) {
+/***  teacher  ***/
       $idteacher = $singleevent->getTeacher();
-      $idtopic = $singleevent->getTopic();
-      $idcoursetype = $singleevent->getCourse();
-      $idplace = $singleevent->getPlace();
       $teacher = $this->getDoctrine()
         ->getRepository(Teacher::class)
         ->find($idteacher);
       $singleevent->setTeacher($teacher->getName());
-      $topic = $this->getDoctrine()
-        ->getRepository(Topic::class)
-        ->find($idtopic);
-      $singleevent->setTopic($topic->getName());
-      $coursetype = $this->getDoctrine()
-        ->getRepository(Type::class)
-        ->find($idcoursetype);
-      $singleevent->setCourse($coursetype->getCoursetype());
+/***  place  ***/
+      $idplace = $singleevent->getPlace();
       $place = $this->getDoctrine()
         ->getRepository(Place::class)
         ->find($idplace);
@@ -184,10 +127,96 @@ class AdminController extends Controller
 /*      $place = $place->getAddress() . " - " . $place->getCity() . " (" . $place->getCountry() . ")"; */
       $place = $place->getCity() . " (" . $place->getCountry() . ")";
       $singleevent->setPlace($place);
+/***  topic  ****/
+      $idtopic = $singleevent->getTopic();
+      $topic = $this->getDoctrine()
+        ->getRepository(Topic::class)
+        ->find($idtopic);
+      $singleevent->setTopic($topic->getName());
+/***  coursetype  ****/
+      $idcoursetype = $singleevent->getCoursetype();
+      $coursetype = $this->getDoctrine()
+        ->getRepository(Type::class)
+        ->find($idcoursetype);
+      $singleevent->setCoursetype($coursetype->getCoursetype());
+/***  topic.gallery  ****/
       $singleevent->setGallery($topic->getGallery());
+/***  topic.weight  ****/
+      $singleevent->setWeight($topic->getWeight());
     }
-    return $this->render('admin.html.twig', array('form' => $formadd->createView(), 'event' => $eventall));
+    return $this->render('allevent.html.twig', array('event' => $eventall));
   }
+
+  public function event(Request $request)
+  {
+    $event = new Evento();
+    $event->setTitle('Titolo ');
+    $teacherall = $this->getDoctrine()
+      ->getRepository(Teacher::class)
+      ->findAll();
+    foreach ($teacherall as $singleteacher) {
+      $id = $singleteacher->getId();
+      $teacherselect[''] = "";
+      if($singleteacher->getActive()) {$teacherselect[$singleteacher->getName()] = $id;}
+    }
+    $topicall = $this->getDoctrine()
+      ->getRepository(Topic::class)
+      ->findAll();
+    foreach ($topicall as $singletopic) {
+      $id = $singletopic->getId();
+      $topicselect[''] = "";
+      if($singletopic->getActive()) {$topicselect[$singletopic->getName()] = $id;}
+    }
+    $typeall = $this->getDoctrine()
+        ->getRepository(Type::class)
+        ->findAll();
+    foreach ($typeall as $singletype) {
+      $id = $singletype->getId();
+      $typeselect[''] = "";
+      $typeselect[$singletype->getCoursetype()] = $id;
+    }
+    $placeall = $this->getDoctrine()
+        ->getRepository(Place::class)
+        ->findAll();
+    foreach ($placeall as $singleplace) {
+      $id = $singleplace->getId();
+      $placeselect[''] = "";
+      if($singleplace->getActive()) {
+        $placename = $singleplace->getName()." [".$singleplace->getCountry()."]";
+        $placeselect[$placename] = $id;
+      }
+    }
+    $today = date('Y-m-d H:i:s');
+    $form = $this->createFormBuilder($event);
+    $form->add("title", TextType::class, array('required'   => true, 'label' => 'Titolo'));
+    $form->add("topic", ChoiceType::class, array('required'   => true, 'choices'  => $topicselect, 'label' => 'Argomento'));
+    $form->add("coursetype", ChoiceType::class, array('required'   => true, 'choices'  => $typeselect, 'label' => 'Tipo di corso'));
+    $form->add("teacher", ChoiceType::class, array('required'   => true, 'choices'  => $teacherselect, 'label' => 'Maestro'));
+    $form->add("place", ChoiceType::class, array('required'   => true, 'choices'  => $placeselect, 'label' => 'Luogo'));
+/*  #JANHU
+    tentativo di mettere la data attuale per start ed end
+    #ENDJANHU */
+/*    $form->add("start", DateTimeType::class, array('required'   => true, 'data' => $today, 'label' => 'Dal'));*/
+    $form->add("start", DateTimeType::class, array('required'   => true, 'label' => 'Dal'));
+/*    $form->add("end", DateTimeType::class, array('required'   => true, 'data' => $today, 'label' => 'Al')); */
+    $form->add("end", DateTimeType::class, array('required'   => true, 'label' => 'Al'));
+    $form->add("body", TextareaType::class, array('required'   => true, 'label' => 'Testo'));
+    $form->add('save', SubmitType::class, array('label' => 'Invia'));
+    $form = $form->getForm();
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $event = $form->getData();
+        $date = date('Y-m-d H:i:s');
+        $event->setDate(new \DateTime());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($event);
+        $em->flush();
+        return $this->redirectToRoute('eventall');
+    }
+    return $this->render('event.html.twig', array('form' => $form->createView()));
+  }
+
+
   private function generateUniqueFileName()
   {
     return md5(uniqid());
@@ -301,44 +330,47 @@ class AdminController extends Controller
 
   public function eventmodify(Request $request, $idedit)
   {
+/***  teacher  ***/
     $teacherall = $this->getDoctrine()
       ->getRepository(Teacher::class)
       ->findAll();
-    $topicall = $this->getDoctrine()
-      ->getRepository(Topic::class)
-      ->findAll();
-    $typeall = $this->getDoctrine()
-        ->getRepository(Type::class)
-        ->findAll();
+    foreach ($teacherall as $singleteacher) {
+      $id = $singleteacher->getId();
+      $teacherselect[''] = "";
+      if($singleteacher->getActive()) {$teacherselect[$singleteacher->getName()] = $id;}
+    }
+/***  place  ***/
     $placeall = $this->getDoctrine()
         ->getRepository(Place::class)
         ->findAll();
-    foreach ($teacherall as $singleteacher) {
-      $id = $singleteacher->getId();
-      if($singleteacher->getActive())
-      {
-        $teacherselect[''] = "";
-        $teacherselect[$singleteacher->getName()] = $id;
-      }
-    }
-    foreach ($topicall as $singletopic) {
-      $id = $singletopic->getId();
-      if($singleteacher->getActive())
-      {
-        $topicselect[''] = "";
-        $topicselect[$singletopic->getName()] = $id;
-      }
-    }
-    foreach ($typeall as $singletype) {
-      $id = $singletype->getId();
-      $typeselect[''] = "";
-      $typeselect[$singletype->getCoursetype()] = $id;
-    }
     foreach ($placeall as $singleplace) {
       $id = $singleplace->getId();
       $placeselect[''] = "";
-      $placeselect[$singleplace->getName()] = $id;
+      if($singleplace->getActive()) {
+        $placename = $singleplace->getName()." [".$singleplace->getCountry()."]";
+        $placeselect[$placename] = $id;
+      }
     }
+/***  topic  ****/
+    $topicall = $this->getDoctrine()
+      ->getRepository(Topic::class)
+      ->findAll();
+    foreach ($topicall as $singletopic) {
+      $id = $singletopic->getId();
+      $topicselect[''] = "";
+      if($singletopic->getActive()) {$topicselect[$singletopic->getName()] = $id;}
+    }
+/***  coursetype  ****/
+    $coursetypeall = $this->getDoctrine()
+      ->getRepository(Type::class)
+      ->findAll();
+    foreach ($coursetypeall as $singlecoursetype) {
+      $id = $singlecoursetype->getId();
+      $coursetypeselect[''] = "";
+      $coursetypeselect[$singlecoursetype->getCoursetype()] = $id;
+    }
+
+
     $em = $this->getDoctrine()->getManager();
     $event = $em->getRepository(Evento::class)->find($idedit);
     $form = $this->createFormBuilder();
@@ -349,33 +381,39 @@ class AdminController extends Controller
 /*  $form->add("topic", ChoiceType::class, array('required'   => true, 'label' => 'Argomento', 'is_selected' => $event->getTopic(), 'choices'  => $topicselect)); */
 /*  $form->add("topic", ChoiceType::class, array('required'   => true, 'label' => 'Argomento', 'choices'  => $topicselect, 'selectedchoice'=> $event->getTopic())); */
     $form->add("topic", ChoiceType::class, array('required'   => true, 'label' => 'Argomento', 'choices'  => $topicselect));
-    $form->add("course", ChoiceType::class, array('required'   => true, 'label' => 'Tipo di corso', 'choices'  => $typeselect));
+    $form->add("coursetype", ChoiceType::class, array('required'   => true, 'label' => 'Tipo di corso', 'choices'  => $coursetypeselect));
     $form->add("teacher", ChoiceType::class, array('required'   => true, 'label' => 'Maestro', 'choices'  => $teacherselect));
     $form->add("place", ChoiceType::class, array('required'   => true, 'label' => 'Luogo', 'choices'  => $placeselect));
     $form->add("start", DateTimeType::class, array('required'   => true, 'label' => 'Dal'));
     $form->add("end", DateTimeType::class, array('required'   => true, 'label' => 'Al'));
     $form->add("id", HiddenType::class, array('data' => $event->getId()));
+    $form->add("body", TextareaType::class, array('required'   => true, 'label' => 'Testo', 'data' => $event->getBody() ));
+    $form->add("attivo", CheckboxType::class, array('data' => $event->getActive(), 'required'   => false, 'label' => 'attivo '));
     $form->add('save', SubmitType::class, array('label' => 'Invia'));
     $form = $form->getForm();
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
-        $event = $form->getData();
-        $form = $form->getData();
-        $eventedit = $em->getRepository(Evento::class)->find($form['id']);
-        if (empty($form['attivo'])) $form['attivo'] = 0;
-        //$eventedit->setActive($form['attivo']);
-        $eventedit->setTitle($form['title']);
-        $eventedit->setStart($form['start']);
-        $eventedit->setEnd($form['end']);
-        $eventedit->setTeacher($form['teacher']);
-        $eventedit->setPlace($form['place']);
-        $eventedit->setTopic($form['topic']);
-        $em->flush();
-        //$event = $em->getRepository(Evento::class)->find($form['id']);
-        return $this->redirectToRoute('admin');
+      $event = $form->getData();
+      $form = $form->getData();
+      $eventedit = $em->getRepository(Evento::class)->find($form['id']);
+      $eventedit->setTitle($form['title']);
+      $eventedit->setTopic($form['topic']);
+      $eventedit->setCoursetype($form['coursetype']);
+      $eventedit->setTeacher($form['teacher']);
+      $eventedit->setPlace($form['place']);
+      $eventedit->setStart($form['start']);
+      $eventedit->setEnd($form['end']);
+      $eventedit = $em->getRepository(Evento::class)->find($form['id']);
+      $eventedit->setBody($form['body']);
+      if (empty($form['attivo'])) $form['attivo'] = 0;
+      $eventedit->setActive($form['attivo']);
+      $em->flush();
+      //$event = $em->getRepository(Evento::class)->find($form['id']);
+      return $this->redirectToRoute('eventall');
       }
     return $this->render('eventmodify.html.twig', array('form' => $form->createView()));  }
 
+/*
   public function eventedit(Request $request, $idedit)
   {
     $teacherall = $this->getDoctrine()
@@ -442,6 +480,7 @@ class AdminController extends Controller
       }
     return $this->render('editevent.html.twig', array('form' => $form->createView()));
   }
+  */
   public function topic(Request $request)
   {
     $topic = new Topic();
@@ -898,7 +937,7 @@ class AdminController extends Controller
       $em->remove($event);
       $em->flush();
     }
-    return $this->redirectToRoute('admin');
+    return $this->redirectToRoute('eventall');
   }
   public function removeplace($id)
   {

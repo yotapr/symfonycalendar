@@ -42,13 +42,16 @@
           <img src="{{ asset('bower_components/Ionicons/png/512/') }}active{{ entry.active }}.png"  width="20" height="20" alt="Attivo" />
         </div>
         <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+          <a href="place/modify/{{ entry.id }}">
           <img src="{{ asset('bower_components/Ionicons/png/512/edit.png') }}" width="20" height="20" alt="Modifica" /> Modifica</a><br />
           {% if entry.delete == 1 %}
+            <a href="place/remove/{{ entry.id }}">
             <img src="{{ asset('bower_components/Ionicons/png/512/android-remove.png') }}" width="20" height="20" alt="Cancella" /> Cancella</a>
           {% endif %}
         </div>
       </div>
       {% endfor %}
+      <a href="new">
       <img src="{{ asset('bower_components/Ionicons/png/512/android-add.png') }}" width="20" height="20" alt="Nuovo" />
       <strong>Nuovo Luogo</strong></a>
       </div>
