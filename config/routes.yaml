@@ -160,3 +160,8 @@ recoverpasswordurl:
     controller: App\Controller\AdminController::changepassword
 logout:
     path: /logout
+booking:
+    path: admin/event/booking/{id}
+    controller: App\Controller\AdminController::bookingall
+    requirements:
+        id: '\d+'

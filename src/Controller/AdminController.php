@@ -216,6 +216,25 @@ class AdminController extends Controller
     return $this->render('event.html.twig', array('form' => $form->createView()));
   }
 
+  public function bookingall(Request $request, $id){
+    $em = $this->getDoctrine()->getManager();
+/* deve cercare $id nel campo booking.event
+//    $booking = $em->getRepository(Booking::class)->find($id);
+    if (!$booking)
+    {
+      // mesaggio nessun prenotato
+    } else
+    {
+    // prepara il display
+    }
+    */
+
+    $bookingall = $this->getDoctrine()
+      ->getRepository(Booking::class)
+      ->findAll();
+    return $this->render('allbooking.html.twig', array('user' => $bookingall));
+  }
+
 
   private function generateUniqueFileName()
   {
