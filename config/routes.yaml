@@ -165,3 +165,6 @@ booking:
     controller: App\Controller\AdminController::bookingall
     requirements:
         id: '\d+'
+icone:
+    path: /admin/icone
+    controller: App\Controller\AdminController::icone

@@ -627,7 +627,7 @@ class AdminController extends Controller
   {
     $form = $this->createFormBuilder()
         ->add('email', EmailType::class)
-        ->add('send', SubmitType::class)
+        ->add('send', SubmitType::class, array('label' => 'Invia'))
         ->getForm();
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
@@ -1058,4 +1058,11 @@ class AdminController extends Controller
       }
       return $this->render('newpassword.html.twig', array('form' => $form->createView()));
   }
+
+  public function icone()
+  {
+    return $this->render('icone.html.twig');
+  }
+
+
 }

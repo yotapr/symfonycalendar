@@ -32,7 +32,10 @@
                 <div class="navbar-custom-menu">
                   <ul class="nav navbar-nav">
                     <li class="user user-menu">
-                      <a href="#">profilo utente</a>
+                      <a href="{{ app.request.getBaseURL() }}/user/profile">profilo utente</a>
+                    </li>
+                    <li class="user user-menu">
+                      <a href="{{ app.request.getBaseURL() }}/logout">esci</a>
                     </li>
                   </ul>
                 </div>
