@@ -15,6 +15,7 @@ class CalendarController extends Controller
 {
     public function index(Request $request)
     {
+
       $teacherall = $this->getDoctrine()
         ->getRepository(Teacher::class)
         ->findAll();
@@ -45,15 +46,18 @@ class CalendarController extends Controller
       foreach ($placeall as $singleplace) {
         $id = $singleplace->getId();
         $placeselect[''] = "";
-        $placeselect[$singleplace->getName()] = $id;
+        $placeselect[$singleplace->getCIty()] = $id;
+/*        $placeselect[$singleplace->getName()] = $id; */
       }
       $date = date('Y,m,d');
       $form = $this->createFormBuilder()
         ->add('argomento', ChoiceType::class, array('choices' => $topicselect, 'required'   => false,))
-        ->add('centro', ChoiceType::class, array('choices' => $placeselect, 'required'   => false,))
         ->add('tipo', ChoiceType::class, array('choices' => $typeselect, 'required'   => false,))
+        ->add('citta', ChoiceType::class, array('choices' => $placeselect, 'required'   => false, 'label' => "Città",))
+/*        ->add('citta', ChoiceType::class, array('choices' => $placeselect, array('required'   => false, 'label' => "Città"))) */
+
         ->add('maestro', ChoiceType::class, array('choices' => $teacherselect, 'required'   => false,))
-        ->add('invia', SubmitType::class)
+        ->add('cerca', SubmitType::class)
         ->getForm();
       $form->handleRequest($request);
       if ($form->isSubmitted()) {
@@ -67,29 +71,38 @@ class CalendarController extends Controller
         $event = $this->getDoctrine()
           ->getRepository(Evento::class)
           ->findByDate($date);
+/*          ->findAll(); */
       }
       foreach ($event as $singleevent) {
+
+/***  teacher  ***/
         $idteacher = $singleevent->getTeacher();
-        $idtopic = $singleevent->getTopic();
-        $idcoursetype = $singleevent->getCourse();
-        $idplace = $singleevent->getPlace();
         $teacher = $this->getDoctrine()
           ->getRepository(Teacher::class)
           ->find($idteacher);
         $singleevent->setTeacher($teacher->getName());
+/***  place  ***/
+        $idplace = $singleevent->getPlace();
+        $place = $this->getDoctrine()
+          ->getRepository(Place::class)
+          ->find($idplace);
+        $place1 = $place->getAddress() . " - " . $place->getCity() . " (" . $place->getCountry() . ")";
+        $singleevent->setPlace($place1);
+        $singleevent->setPlacename($place->getName());
+/***  topic  ****/
+        $idtopic = $singleevent->getTopic();
+/*        $idcoursetype = $singleevent->getCourse(); */
         $topic = $this->getDoctrine()
           ->getRepository(Topic::class)
           ->find($idtopic);
         $singleevent->setTopic($topic->getName());
+        $singleevent->setGallery($topic->getGallery());
+/***  coursetype  ****/
+        $idcoursetype = $singleevent->getCoursetype();
         $coursetype = $this->getDoctrine()
           ->getRepository(Type::class)
           ->find($idcoursetype);
-        $singleevent->setCourse($coursetype->getCoursetype());
-        $place = $this->getDoctrine()
-          ->getRepository(Place::class)
-          ->find($idplace);
-        $place = $place->getAddress() . " - " . $place->getCity() . " (" . $place->getCountry() . ")";
-        $singleevent->setPlace($place);
+        $singleevent->setCoursetype($coursetype->getCoursetype());
       }
       if (!$event) {
         return new Response(

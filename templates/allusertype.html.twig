@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container">
+      <h2>Tipi di utente</h2>
+      <div class="row row-title">
+        <div class="col-lg-10 col-md-6 col-sm-2 portfolio-item">
+          Tipo
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+          Modifica / Cancella
+        </div>
+      </div>
+      {% for entry in usertype %}
+      <div class="row row-item">
+        <div class="col-lg-10 col-md-6 col-sm-2 portfolio-item">
+          {{ entry.usertype }}
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+          <a href="usertype/modify/{{ entry.id }}">
+          <img src="{{ asset('bower_components/Ionicons/png/512/edit.png') }}" width="20" height="20" alt="Modifica" /> Modifica</a><br />
+          {# if entry.delete == 1 #}
+            <a href="usertype/remove/{{ entry.id }}">
+            <img src="{{ asset('bower_components/Ionicons/png/512/android-remove.png') }}" width="20" height="20" alt="Cancella" /> Cancella</a>
+          {# endif #}
+        </div>
+      </div>
+      {% endfor %}
+      <a href="usertype/new">
+      <img src="{{ asset('bower_components/Ionicons/png/512/android-add.png') }}" width="20" height="20" alt="Nuovo" />
+      <strong>Nuovo tipo di utente</strong></a>
+    </div>
+  </section>
+</div>
+{% endblock %}

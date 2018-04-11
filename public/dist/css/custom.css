@@ -1,0 +1,24 @@
+/*!
+ *   custom.css  v1-0-0
+ *   Author: Janhu Silvio Crispiatico
+ */
+/*
+ * Core: General Layout Style
+ * -------------------------
+ */
+
+.row-item-active1,
+.row-item{
+  background-color: #fff;
+  border-bottom: 1px solid #ECF0F5
+}
+/* used only when item is'n active */
+.row-item-active{
+  background-color: #dadada;
+  border-bottom: 1px solid #ECF0F5
+}
+.row-title{
+  font-weight: bold; color:#FFF;
+  background-color: #3C8DBC;
+  border-bottom: 1px solid #ECF0F5
+}

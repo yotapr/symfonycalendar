@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container">
+      <h2>Dashboard</h2>
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <a href="{{ app.request.getBaseURL() }}/admin/event">
+              <span class="info-box-icon bg-green"><i class="ion ion-ios-calendar-outline"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Eventi</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <a href="{{ app.request.getBaseURL() }}/admin/topic">
+              <span class="info-box-icon bg-aqua"><i class="ion ion-ios-book-outline"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Argomenti</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <a href="{{ app.request.getBaseURL() }}/admin/teacher">
+              <span class="info-box-icon bg-aqua"><i class="ion ion-ios-contact-outline"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Maestri</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <a href="{{ app.request.getBaseURL() }}/admin/type">
+              <span class="info-box-icon bg-aqua"><i class="ion ion-ios-compose-outline"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Tipi di corso</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <a href="{{ app.request.getBaseURL() }}/admin/place">
+              <span class="info-box-icon bg-aqua"><i class="ion ion-ios-navigate-outline"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Luoghi</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <a href="{{ app.request.getBaseURL() }}/admin/user">
+              <span class="info-box-icon bg-yellow"><i class="ion ion-ios-person-outline"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Utenti</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <a href="{{ app.request.getBaseURL() }}/admin/usertype">
+              <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Tipi di utenti</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

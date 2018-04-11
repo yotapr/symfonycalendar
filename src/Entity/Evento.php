@@ -49,12 +49,32 @@ class Evento
     /**
      * @ORM\Column(type="integer")
      */
-    private $course;
+    private $topic;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $topic;
+    private $coursetype;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $body;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
+
+    // used for display place.name
+    private $placename;
+
+    // used for display topic.gallery
+    private $gallery;
+
+    // used for display topic.weight
+    private $weight;
 
 
     // add your own fields
@@ -238,30 +258,6 @@ class Evento
     }
 
     /**
-     * Get the value of Course
-     *
-     * @return mixed
-     */
-    public function getCourse()
-    {
-        return $this->course;
-    }
-
-    /**
-     * Set the value of Course
-     *
-     * @param mixed course
-     *
-     * @return self
-     */
-    public function setCourse($course)
-    {
-        $this->course = $course;
-
-        return $this;
-    }
-
-    /**
      * Get the value of Topic
      *
      * @return mixed
@@ -281,6 +277,150 @@ class Evento
     public function setTopic($topic)
     {
         $this->topic = $topic;
+
+        return $this;
+    }
+
+
+
+    public function getPlacename()
+    {
+        return $this->placename;
+    }
+
+    public function setPlacename($placename)
+    {
+        $this->placename = $placename;
+
+        return $this;
+    }
+
+
+    public function getGallery()
+    {
+        return $this->gallery;
+    }
+
+    public function setGallery($gallery)
+    {
+        $this->gallery = $gallery;
+
+        return $this;
+    }
+
+
+
+
+
+    /**
+     * Set the value of Id
+     *
+     * @param mixed id
+     *
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Coursetype
+     *
+     * @return mixed
+     */
+    public function getCoursetype()
+    {
+        return $this->coursetype;
+    }
+
+    /**
+     * Set the value of Coursetype
+     *
+     * @param mixed coursetype
+     *
+     * @return self
+     */
+    public function setCoursetype($coursetype)
+    {
+        $this->coursetype = $coursetype;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of Body
+     *
+     * @return mixed
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    /**
+     * Set the value of Body
+     *
+     * @param mixed body
+     *
+     * @return self
+     */
+    public function setBody($body)
+    {
+        $this->body = $body;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of Active
+     *
+     * @return mixed
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Set the value of Active
+     *
+     * @param mixed active
+     *
+     * @return self
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of Weight
+     *
+     * @return mixed
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * Set the value of Weight
+     *
+     * @param mixed weight
+     *
+     * @return self
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
 
         return $this;
     }

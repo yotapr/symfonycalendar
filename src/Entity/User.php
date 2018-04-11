@@ -129,11 +129,13 @@ class User implements UserInterface, \Serializable
     public function getRoles()
     {
         return array('ROLE_ADMIN');
+        return $this->roles;
     }
 
     public function setRoles()
     {
         $this->roles = 'ROLE_ADMIN';
+        $this->roles = $roles;
 
         return $this;
     }

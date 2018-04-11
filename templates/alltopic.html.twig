@@ -1,18 +1,56 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <div class="content-wrapper">
-<section class="content">
-<div class="container">
-<div class="row">
-{% for entry in topic %}
-<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item" style = 'background-color: #fff; '>
-  {{ entry.name }}
-  <a href="remove/{{ entry.id }}">Cancella</a>
-</div>
-{% endfor %}
-
-</div>
-</div>
-</section>
+  <section class="content">
+    <div class="container">
+      <h2>Argomenti</h2>
+      <a href="new">
+      <img src="{{ asset('bower_components/Ionicons/png/512/android-add.png') }}" width="20" height="20" alt="Nuovo" />
+      <strong>Nuovo Argomento</strong></a>
+        <div class="row"  style = 'font-weight: bold; color:#FFF; background-color: #3C8DBC; border-bottom: 1px solid #ECF0F5'>
+          <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+          </div>
+          <div class="col-lg-7 col-md-5 col-sm-3 portfolio-item">
+            Argomento
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+            Attivo
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+            Peso
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+            Modifica / Cancella
+          </div>
+        </div>
+        {% for entry in topic %}
+        <div class="row row-item-active{{ entry.active }}">
+          <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+            <img src="{{ asset('files/immagini/') }}{{ entry.gallery }}"  width="60" height="60" alt="" />
+          </div>
+          <div class="col-lg-7 col-md-5 col-sm-3 portfolio-item">
+            {{ entry.name }}
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+            <img src="{{ asset('bower_components/Ionicons/png/512/') }}active{{ entry.active }}.png"  width="20" height="20" alt="Attivo" />
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 portfolio-item">
+            {{ entry.weight }}
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 portfolio-item">
+            <a href="modify/{{ entry.id }}">
+            <img src="{{ asset('bower_components/Ionicons/png/512/edit.png') }}" width="20" height="20" alt="Modifica" /> Modifica</a><br />
+            {% if entry.delete == 1 %}
+              <a href="remove/{{ entry.id }}">
+              <img src="{{ asset('bower_components/Ionicons/png/512/android-remove.png') }}" width="20" height="20" alt="Cancella" /> Cancella</a>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      <a href="new">
+      <img src="{{ asset('bower_components/Ionicons/png/512/android-add.png') }}" width="20" height="20" alt="Nuovo" />
+      <strong>Nuovo Argomento</strong></a>
+    </div>
+  </section>
 </div>
 {% endblock %}

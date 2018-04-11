@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container">
+    <h2>Modifica un argomento</h2>
+      <div class="row"  style = 'background-color: #fff'>
+        {{ form_start(forms) }}
+        {{ form_widget(forms) }}
+        {{ form_end(forms) }}
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
